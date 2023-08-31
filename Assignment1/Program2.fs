@@ -63,7 +63,7 @@ type texpr =                            (* target expressions *)
 
 let rec getindex vs x = 
     match vs with 
-    | []    -> failwith "Variable not found"
+    | []    -> failwith ("Variable not found " + x)
     | y::yr -> if x=y then 0 else 1 + getindex yr x;;
 
 (* Compiling from expr to texpr *)
@@ -89,7 +89,7 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
             
             
             let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns
-            snd <| List.fold (fun (env : string list, exp) (_, erh) -> (env.Tail, TLet(tcomp erh env.Tail, exp))) (cenv1, tcomp ebody cenv1) assigns
+            snd <| List.fold (fun (env : string list, exp) (_, erh) -> (env.Tail, TLet(tcomp erh env.Tail, exp))) (cenv1, tcomp ebody cenv1) (List.rev assigns)
     | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)
     
     
