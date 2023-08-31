@@ -1,5 +1,76 @@
 module Assignment1.Two 
 
+//2.1,
+
+(*
+
+Exercise 2.1 Extend the expression language expr from Intcomp1.fs with
+multiple sequential let-bindings, such as this (in concrete syntax):
+let x1 = 5+7 x2 = x1*2 in x1+x2 end
+To evaluate this, the right-hand side expression 5+7 must be evaluated and bound
+to x1, and then x1*2 must be evaluated and bound to x2, after which the let-body
+x1+x2 is evaluated.
+The new abstract syntax for expr might be
+type expr =
+| CstI of int
+| Var of string
+| Let of (string * expr) list * expr (* CHANGED *)
+| Prim of string * expr * expr
+
+so that the Let constructor takes a list of bindings, where a binding is a pair of a
+variable name and an expression. The example above would be represented as:
+Let ([("x1", ...); ("x2", ...)], Prim("+", Var "x1", Var "x2"))
+Revise the eval interpreter from Intcomp1.fs to work for the expr language
+extended with multiple sequential let-bindings.
+*)
+
+
+//2.2,
+
+(*
+Exercise 2.2 Revise the function freevars : expr -> string list to
+work for the language as extended in Exercise 2.1. Note that the example expression
+in the beginning of Exercise 2.1 has no free variables, but let x1 = x1+7 in
+x1+8 end has the free variable x1, because the variable x1 is bound only in the
+body (x1+8), not in the right-hand side (x1+7), of its own binding. There are
+programming languages where a variable can be used in the right-hand side of its
+own binding, but ours is not such a language.
+
+*)
+
+
+//2.3
+
+(*
+Exercise 2.3 Revise the expr-to-texpr compiler tcomp : expr -> texpr
+from Intcomp1.fs to work for the extended expr language. There is no need
+to modify the texpr language or the teval interpreter to accommodate multiple
+sequential let-bindings.
+*)
+
+
+//(optionally also 2.6).
+
+(*
+Exercise 2.6 Now modify the interpretation of the language from Exercise 2.1 so
+that multiple let-bindings are simultaneous rather than sequential. For instance,
+let x1 = 5+7 x2 = x1*2 in x1+x2 end
+should still have the abstract syntax
+Let ([("x1", ...); ("x2", ...)], Prim("+", Var "x1", Var "x2"))
+but now the interpretation is that all right-hand sides must be evaluated before any
+left-hand side variable gets bound to its right-hand side value. That is, in the above
+expression, the occurrence of x1 in the right-hand side of x2 has nothing to do with
+the x1 of the first binding; it is a free variable.
+Revise the eval interpreter to work for this version of the expr language. The
+idea is that all the right-hand side expressions should be evaluated, after which all
+the variables are bound to those values simultaneously. Hence
+let x = 11 in let x = 22 y = x+1 in x+y end end
+should compute 12 + 22 because x in x+1 is the outer x (and hence is 11), and x
+in x+y is the inner x (and hence is 22). In other words, in the let-binding
+let x1 = e1 ... xn = en in e end
+the scope of the variables x1 . . . xn should be e, not e1 . . . en.
+Exercise 2.7 Define a version of the (naive, exponential-time) Fibonacci
+*)
 type expr =
     | CstI of int
     | Var of string
@@ -87,9 +158,8 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
                     (x = 1 (y = x (x + y)) [ ]
             *)
             
-            
-            let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns
-            List.fold (fun (env : string list, exp) (_, erh) -> (env.Tail, TLet(tcomp erh env.Tail, exp))) (cenv1, tcomp ebody cenv1) (List.rev assigns)
+            let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns //add all vars to env
+            List.fold (fun (env : string list, exp) (_, erh) -> (env.Tail, TLet(tcomp erh env.Tail, exp))) (cenv1, tcomp ebody cenv1) (List.rev assigns) //start from the inner most TLet
             |> snd
     | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)
     
@@ -111,5 +181,4 @@ let rec teval (e : texpr) (renv : int list) : int =
     
 let test = teval (tcomp (Let([("x", CstI 1); ("y", Var "x")], Prim("+", Var "y", Var "x"))) []) [];;
 
-//print test
 printfn "%A" test
