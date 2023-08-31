@@ -32,8 +32,41 @@ expression are possible. For instance, the interpreter might start by testing wh
 expressions e2 and e3 are syntactically identical, in which case there is no need to
 evaluate e1, only e2 (or e3). Although possible, this shortcut is rarely useful.
 *)
+let rec lookup env x =
+    match env with 
+    | []        -> failwith (x + " not found")
+    | (y, v)::r -> if x=y then v else lookup r x;;
+
+type expr = 
+  | CstI of int
+  | Var of string
+  | Prim of string * expr * expr
+  | If of expr * expr * expr
+
+let rec eval e (env : (string * int) list) : int =
+    match e with
+    | CstI i            -> i
+    | Var x             -> lookup env x
+    | Prim(ope, e1, e2) ->
+        let i1 = eval e1 env
+        let i2 = eval e2 env
+        match ope with
+        | "+" -> i1 + i2
+        | "*" -> i1 * i2
+        | "-" -> i1 - i2
+        | "max" -> max i1 i2
+        | "min" -> min i1 i2
+        | "==" -> if i1 = i2 then 1 else 0
+    | If(e1, e2, e3)       ->
+        let boole1 = eval e1 env
+        if boole1 > 0 then eval e2 env else eval e3 env
+    | Prim _            -> failwith "unknown primitive";;
 
 
+let example1 = eval (Prim("max", CstI 11, CstI 10)) []
+let example2 = eval (Prim("min", CstI 11, CstI 10)) []
+let example3 = eval (Prim("==", CstI 11, CstI 10)) []
+let example4 = eval (If(Var "a", CstI 11, CstI 22)) [("a", 1)]
 
 //1.2,
 (*
@@ -68,6 +101,82 @@ expressions (such as aexpr) with respect to a single variable.
 *)
 
 
+type aexpr = 
+  | CstI of int
+  | Var of string
+  | Add of aexpr * aexpr
+  | Mul of aexpr * aexpr
+  | Sub of aexpr * aexpr
+  
+  
+  
+// v − (w + z)
+let firstaxpr = Sub(Var "v", Add(Var "w", Var "z"))
+
+// 2 ∗ (v − (w + z))
+let secondaxpr = Mul(CstI 2, Sub(Var "v", Add(Var "w", Var "z")))
+
+// x + y + z + v.
+
+let thirdaxpr = Add(Add(Add(Var "x", Var "y"), Var "z"), Var "v")
+
+
+let rec fmt (exp : aexpr) : string =
+        match exp with 
+            | CstI i -> string i
+            | Var x -> x
+            | Add (e1, e2) -> "(" + fmt e1 + "+" + fmt e2 + ")"
+            | Sub (e1, e2) -> "(" + fmt e1 + "-" + fmt e2 + ")"
+            | Mul (e1, e2) -> "(" + fmt e1 + "*" + fmt e2 + ")"
+            
+let fmtexample = fmt thirdaxpr
+
+
+let rec simplify (aexpr: aexpr) : aexpr =
+    match aexpr with
+    | CstI i -> CstI i
+    | Var x -> Var x
+    | Mul(e1, e2) ->
+        let s1 = simplify e1
+        let s2 = simplify e2
+        match s1, s2 with
+        | CstI 0, _ -> CstI 0
+        | _, CstI 0-> CstI 0
+        | CstI 1, _ -> s2
+        | _, CstI 1 -> s1
+        | _ -> Mul(s1, s2)
+    | Add(e1, e2) ->
+        let s1 = simplify e1
+        let s2 = simplify e2
+        match s1, s2 with
+        | CstI 0, _ -> s2
+        | _, CstI 0 -> s1
+        | _ -> Add(s1, s2)
+    | Sub(e1, e2) ->
+        let s1 = simplify e1
+        let s2 = simplify e2
+        if (s1 = s2) then CstI 0
+        else 
+            match s1, s2 with
+            | _, CstI 0 -> s1
+            | _ -> Sub(s1, s2)
+        
+let example = simplify (Mul(Add(CstI 0, Var "x"), Sub(CstI 1, Sub(CstI 3, CstI 3))))
+
+//Write an F# function to perform symbolic differentiation of simple arithmetic expressions (such as aexpr) with respect to a single variable.
+
+let rec diff (aexpr: aexpr) : aexpr =
+    match aexpr with
+    | CstI _ -> CstI 0
+    | Var x -> if x = "x" then CstI 1 else CstI 0
+    | Mul(e1, e2) ->
+        Add(Mul(diff e1, e2), Mul(e1, diff e2))
+    | Add(e1, e2) ->
+        Add(diff e1, diff e2)
+    | Sub(e1, e2) ->
+        Sub(diff e1, diff e2)
+
+let exampleDiff = fmt (diff(Add(Mul(Var "x", Var "y"), Sub(Var "x", CstI 4))))
 //1.4,
 
 (*
@@ -165,3 +274,7 @@ let x1 = e1 ... xn = en in e end
 the scope of the variables x1 . . . xn should be e, not e1 . . . en.
 Exercise 2.7 Define a version of the (naive, exponential-time) Fibonacci
 *)
+let test = Assignment1.Two.teval (Assignment1.Two.tcomp (Assignment1.Two.Let([("x", Assignment1.Two.CstI 1); ("y", Assignment1.Two.Var "x")],Assignment1.Two.Prim("+", Assignment1.Two.Var "y", Assignment1.Two.Var "x"))) []) [];;
+
+//print test
+printfn "%A" test

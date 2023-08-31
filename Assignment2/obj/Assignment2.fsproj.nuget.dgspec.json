@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj": {}
+    "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj": {}
   },
   "projects": {
-    "c:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj": {
+    "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj",
+        "projectUniqueName": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj",
         "projectName": "Assignment2",
-        "projectPath": "c:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj",
+        "projectPath": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\Assignment2.fsproj",
         "packagesPath": "C:\\Users\\jgrum\\.nuget\\packages\\",
-        "outputPath": "c:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\obj\\",
+        "outputPath": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jgrum\\AppData\\Roaming\\NuGet\\NuGet.Config",
