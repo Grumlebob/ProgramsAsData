@@ -157,8 +157,7 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
                             (y = x (x + y) [x]
                     (x = 1 (y = x (x + y)) [ ]
 
-
-For example, given 'assigns' as 'x = 1' and 'y = x', and 'ebody' as 'y + x':
+Full example with TLet:
 
 Given assignments: x = 1, y = x
 Given expression: y + x
@@ -177,18 +176,9 @@ The final translated expression preserves the variable bindings:
 
 TLet(Tcomp x = 1 [], TLet(Tcomp y = x [y], tcomp y + x [y, x]))
 
-
-        Discard because:
-        In the target language, the TLet construct is used to represent variable assignments, 
-        but once the assignments have been translated and applied, there is no need to keep the outermost TLet in the expression.
-
-         This translation strategy preserves the lexical scoping of variables.
+This translation strategy preserves the lexical scoping of variables.
 
 
-For each assignment (x, erh) in assigns, you do the following:
-Tcomp erh env.Tail translates the right-hand side of the assignment (erh) with the current environment, excluding the variable x introduced by the assignment. This ensures that the assignment's scope is correctly maintained.
-TLet(tcomp erh env.Tail, exp) wraps the translation of the right-hand side in a TLet with the current environment and combines it with the accumulated expression exp. This step preserves the scoping of the assignment and the subsequent expressions.
-(env.Tail, TLet(..., exp)) updates the environment by removing the variable x from it.
          
       *)
             *)
