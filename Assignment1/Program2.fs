@@ -170,7 +170,12 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
          4. The final result discards the outermost 'TLet':
             - 'TLet(tcomp x = 1 [], TLet(tcomp y = x [y], tcomp y + x [y, x]))' => 'Tcomp x = 1 [], tcomp y = x [y], tcomp y + x [y, x]'
 
+        Discard because:
+        In the target language, the TLet construct is used to represent variable assignments, 
+        but once the assignments have been translated and applied, there is no need to keep the outermost TLet in the expression.
+
          This translation strategy preserves the lexical scoping of variables.
+         
       *)
             *)
             
