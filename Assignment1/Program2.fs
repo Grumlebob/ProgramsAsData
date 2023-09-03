@@ -158,23 +158,37 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
                     (x = 1 (y = x (x + y)) [ ]
 
 
-         For example, given 'assigns' as 'x = 1' and 'y = x', and 'ebody' as 'y + x':
+For example, given 'assigns' as 'x = 1' and 'y = x', and 'ebody' as 'y + x':
 
-         1. Initially, 'cenv' is [y, x].
-         2. We start building the target expression from the innermost assignment:
-            - 'tcomp (expr: y + x) (cenv: [y, x])'
-            - Result: 'TLet(tcomp y = x [y], tcomp y + x [y, x])'
-         3. We continue with the next assignment:
-            - 'tcomp x = 1 [y, x]'
-            - Result: 'TLet(tcomp x = 1 [], TLet(tcomp y = x [y], tcomp y + x [y, x]))'
-         4. The final result discards the outermost 'TLet':
-            - 'TLet(tcomp x = 1 [], TLet(tcomp y = x [y], tcomp y + x [y, x]))' => 'Tcomp x = 1 [], tcomp y = x [y], tcomp y + x [y, x]'
+Given assignments: x = 1, y = x
+Given expression: y + x
+
+Initially, the context 'cenv' is [y, x].
+
+We start building the target expression from the innermost assignment:
+
+1. Translate 'y + x' with 'cenv' as [y, x]:
+   Result: TLet(Tcomp y = x [y], tcomp y + x [y, x])
+
+2. Continue with the next assignment 'x = 1':
+   Result: TLet(Tcomp x = 1 [], TLet(Tcomp y = x [y], tcomp y + x [y, x]))
+
+The final translated expression preserves the variable bindings:
+
+TLet(Tcomp x = 1 [], TLet(Tcomp y = x [y], tcomp y + x [y, x]))
+
 
         Discard because:
         In the target language, the TLet construct is used to represent variable assignments, 
         but once the assignments have been translated and applied, there is no need to keep the outermost TLet in the expression.
 
          This translation strategy preserves the lexical scoping of variables.
+
+
+For each assignment (x, erh) in assigns, you do the following:
+Tcomp erh env.Tail translates the right-hand side of the assignment (erh) with the current environment, excluding the variable x introduced by the assignment. This ensures that the assignment's scope is correctly maintained.
+TLet(tcomp erh env.Tail, exp) wraps the translation of the right-hand side in a TLet with the current environment and combines it with the accumulated expression exp. This step preserves the scoping of the assignment and the subsequent expressions.
+(env.Tail, TLet(..., exp)) updates the environment by removing the variable x from it.
          
       *)
             *)
