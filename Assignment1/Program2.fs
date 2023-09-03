@@ -156,6 +156,22 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
                                 (y + x) [y, x]
                             (y = x (x + y) [x]
                     (x = 1 (y = x (x + y)) [ ]
+
+
+         For example, given 'assigns' as 'x = 1' and 'y = x', and 'ebody' as 'y + x':
+
+         1. Initially, 'cenv' is [y, x].
+         2. We start building the target expression from the innermost assignment:
+            - 'tcomp (expr: y + x) (cenv: [y, x])'
+            - Result: 'TLet(tcomp y = x [y], tcomp y + x [y, x])'
+         3. We continue with the next assignment:
+            - 'tcomp x = 1 [y, x]'
+            - Result: 'TLet(tcomp x = 1 [], TLet(tcomp y = x [y], tcomp y + x [y, x]))'
+         4. The final result discards the outermost 'TLet':
+            - 'TLet(tcomp x = 1 [], TLet(tcomp y = x [y], tcomp y + x [y, x]))' => 'Tcomp x = 1 [], tcomp y = x [y], tcomp y + x [y, x]'
+
+         This translation strategy preserves the lexical scoping of variables.
+      *)
             *)
             
             let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns //add all vars to env
