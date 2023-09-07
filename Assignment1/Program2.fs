@@ -156,6 +156,56 @@ let rec tcomp (e : expr) (cenv : string list) : texpr = //tcomp
                                 (y + x) [y, x]
                             (y = x (x + y) [x]
                     (x = 1 (y = x (x + y)) [ ]
+
+Full example with TLet:
+
+Given assignments: x = 1, y = x
+Given expression: y + x
+
+Initially, the context 'cenv' is [y, x].
+
+We start building the target expression from the innermost assignment:
+
+1. Translate 'y + x' with 'cenv' as [y, x]:
+   Result: TLet(Tcomp y = x [y], tcomp y + x [y, x])
+
+2. Continue with the next assignment 'x = 1':
+   Result: TLet(Tcomp x = 1 [], TLet(Tcomp y = x [y], tcomp y + x [y, x]))
+
+The final translated expression preserves the variable bindings:
+
+TLet(Tcomp x = 1 [], TLet(Tcomp y = x [y], tcomp y + x [y, x]))
+
+Final output explained:
+The outermost TLet:
+
+TLet(Tcomp x = 1 [], ...) represents a variable assignment of x = 1.
+The inner TLet:
+
+TLet(Tcomp y = x [y], ...) represents a variable assignment of y = x, where x is the result of the previous assignment x = 1.
+The expression inside the innermost TLet:
+
+tcomp y + x [y, x] represents the expression y + x with an environment that includes bindings for y and x.
+Now, let's evaluate the expression step by step:
+
+TLet(Tcomp x = 1 [], ...):
+
+This assigns x to 1, resulting in an environment where x maps to 1.
+TLet(Tcomp y = x [y], ...):
+
+This assigns y to the value of x (which is 1 based on the previous assignment), resulting in an environment where y maps to 1.
+tcomp y + x [y, x]:
+
+tcomp y looks up the value of y in the environment, which is 1.
+x [y, x] looks up the value of x in the environment, which is 1.
+Therefore, this expression becomes 1 + 1, which evaluates to 2.
+So, the given target expression ultimately evaluates to 2.
+
+This translation strategy preserves the lexical scoping of variables.
+
+
+         
+      *)
             *)
             
             let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns //add all vars to env
