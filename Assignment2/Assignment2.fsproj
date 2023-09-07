@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="intcomp1.fs" />
+        <Compile Include="Program.fs" />
+        <Content Include="FsLexYacc.Runtime.dll" />
+        <Content Include="FSharp.Core.dll" />
+        <Content Include="is1.txt" />
+        <Content Include="Machine.class" />
+        <Content Include="Machine.java" />
+        <Content Include="assigment2Subtask32.drawio" />
+        <Content Include="assigment2Subtask32pdf.pdf" />
+        <Content Include="assignment2Subtask22.drawio" />
+        <Content Include="assignment2Subtask22Pdf.pdf" />
+    </ItemGroup>
+
+</Project>
