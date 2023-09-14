@@ -206,7 +206,7 @@ This translation strategy preserves the lexical scoping of variables.
 
          
       *)
-            *)
+            
             
             let cenv1 = List.fold (fun acc (x, _) -> x :: acc) cenv assigns //add all vars to env
             List.fold (fun (env : string list, exp) (_, erh) -> (env.Tail, TLet(tcomp erh env.Tail, exp))) (cenv1, tcomp ebody cenv1) (List.rev assigns) //start from the inner most TLet

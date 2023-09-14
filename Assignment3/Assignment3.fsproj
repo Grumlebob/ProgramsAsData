@@ -6,8 +6,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Program.fs" />
         <Content Include="exerciseDescription.txt" />
+        <Content Include="34Tree.jpg" />
+        <Compile Include="Absyn.fs" />
+        <Compile Include="ExprPar.fsi" />
+        <Compile Include="ExprPar.fs" />
+        <Compile Include="Expr.fs" />
+        <Compile Include="ExprLex.fs" />
+        <Content Include="ExprLex.fsl" />
+        <Content Include="ExprPar.fsy" />
+        <Compile Include="Parse.fs" />
+        <Compile Include="Program.fs" />
+        <Content Include="README.TXT" />
     </ItemGroup>
 
 </Project>
