@@ -1,0 +1,75 @@
+----------------------3.3------------------------
+Exercise 3.3 Write out the rightmost derivation of the string below from the expression
+grammar at the end of Sect. 3.6.5, corresponding to ExprPar.fsy. Take note
+of the sequence of grammar rules (A–I) used.
+let z = (17) in z + 2 * 3 end EOF
+
+Grammar end of Sect. 3.6.5:
+Main ::= Expr EOF               rule A
+Expr ::= NAME                   rule B
+| CSTINT                        rule C
+| MINUS CSTINT                  rule D
+| LPAR Expr RPAR                rule E
+| LET NAME EQ Expr IN Expr END  rule F
+| Expr TIMES Expr               rule G
+| Expr PLUS Expr                rule H
+| Expr MINUS Expr               rule I
+
+
+MAIN
+Expr EOF                                                                            rule A
+LET NAME EQ Expr IN Expr END EOF                                                    rule F
+LET NAME EQ Expr IN Expr TIMES Expr END EOF                                         rule G
+LET NAME EQ Expr IN Expr TIMES CSTINT(3) END EOF                                    rule C
+LET NAME EQ Expr IN Expr PLUS Expr TIMES CSTINT(3) END EOF                          rule H
+LET NAME EQ Expr IN Expr PLUS CSTINT(2) TIMES CSTINT(3) END EOF                     rule C
+LET NAME EQ Expr IN NAME PLUS CSTINT(2) TIMES CSTINT(3) END EOF                     rule B
+LET NAME EQ LPAR Expr RPAR IN NAME PLUS CSTINT(2) TIMES CSTINT(3) END EOF           rule E
+LET NAME EQ LPAR CSTINT(17) RPAR IN NAME PLUS CSTINT(2) TIMES CSTINT(3) END EOF     rule C
+
+
+
+----------------------3.4------------------------
+Exercise 3.4 Draw the above derivation as a tree.
+
+
+----------------------3.5------------------------
+Exercise 3.5 Get expr.zip from the book homepage and unpack it. Using a
+command prompt, generate (1) the lexer and (2) the parser for expressions by running
+fslex and fsyacc; then (3) load the expression abstract syntax, the lexer and
+parser modules, and the expression interpreter and compilers, into an interactive F#
+session (fsharpi):
+fslex --unicode ExprLex.fsl
+fsyacc --module ExprPar ExprPar.fsy
+fsharpi -r FSharp.PowerPack.dll Absyn.fs ExprPar.fs ExprLex.fs ˆ
+Parse.fs
+Now try the parser on several example expressions, both well-formed and ill-formed
+ones, such as these, and some of your own invention:
+open Parse;;
+fromString "1 + 2 * 3";;
+fromString "1 - 2 - 3";;
+fromString "1 + -2";;
+fromString "x++";;
+fromString "1 + 1.2";;
+fromString "1 + ";;
+fromString "let z = (17) in z + 2 * 3 end";;
+fromString "let z = 17) in z + 2 * 3 end";;
+fromString "let in = (17) in z + 2 * 3 end";;
+fromString "1 + let x=5 in let y=7+x in y+y end + x end";;
+
+----------------------3.6------------------------
+Exercise 3.6 Use the expression parser from Parse.fs and the compiler scomp
+(from expressions to stack machine instructions) and the associated datatypes from
+Expr.fs, to define a function compString : string -> sinstr list
+that parses a string as an expression and compiles it to stack machine code.
+
+----------------------3.7------------------------
+Exercise 3.7 Extend the expression language abstract syntax and the lexer and
+parser specifications with conditional expressions. The abstract syntax should be
+If(e1, e2, e3), so modify file Absyn.fs as well as ExprLex.fsl and file
+ExprPar.fsy. The concrete syntax may be the keyword-laden F#/ML-style:
+if e1 then e2 else e3
+or the more light-weight C/C++/Java/C#-style:
+e1 ? e2 : e3
+Some documentation for fslex and fsyacc is found in this chapter and in Expert
+F# [17].

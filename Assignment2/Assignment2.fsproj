@@ -17,6 +17,11 @@
         <Content Include="assigment2Subtask32pdf.pdf" />
         <Content Include="assignment2Subtask22.drawio" />
         <Content Include="assignment2Subtask22Pdf.pdf" />
+        <Content Include="HelloLex\hello.fsl" />
+        <Content Include="HelloLex\hello2.fsl" />
+        <Content Include="HelloLex\hello3.fsl" />
+        <Compile Include="HelloLex\hello.fs" />
+        <Content Include="HelloLex\hello.exe" />
     </ItemGroup>
 
 </Project>
