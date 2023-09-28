@@ -7,6 +7,29 @@
 
     <ItemGroup>
         <Content Include="AssignmentDecription.txt" />
+        <Compile Include="Absyn.fs" />
+        <Compile Include="Fun.fs" />
+        <Compile Include="FunLex.fs" />
+        <Content Include="FunLex.fsl" />
+        <Compile Include="FunPar.fs" />
+        <Compile Include="FunPar.fsi" />
+        <Content Include="FunPar.fsy" />
+        <Compile Include="HigherFun.fs" />
+        <Content Include="LinkedList.java" />
+        <Compile Include="Parse.fs" />
+        <Compile Include="ParseAndRun.fs" />
+        <Compile Include="ParseAndRunHigher.fs" />
+        <Compile Include="ParseAndType.fs" />
+        <Compile Include="program.fs" />
+        <Content Include="README.TXT" />
+        <Compile Include="TypeInference.fs" />
+        <None Include="chap5.fsx" />
+        <None Include="chap6.fsx" />
+        <None Include="slowTypeInference.fsx" />
+        <Compile Include="program.fs" />
+        <Compile Include="TypedFun.fs" />
+        <Content Include="assignment64one.jpg" />
+        <Content Include="assignment64Two.jpg" />
     </ItemGroup>
 
 </Project>

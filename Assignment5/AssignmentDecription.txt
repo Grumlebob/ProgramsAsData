@@ -7,17 +7,7 @@ merge : int list * int list -> int list
 that takes two sorted lists of integers and merges them into a sorted list of integers.
 For instance, merge ([3;5;12], [2;3;4;7]) should give [2;3;3;4;5;7;12].
 
-
-(jacob note: match listA listB with
-let rec merge listA listB acc =
-match listA, listB with
-| [], [] -> acc
-| [], _ -> acc @ listB
-| _, [] -> acc @ listA
-| headA::tailA, headB::tailB ->
-if headA < headB then merge tailA listB (acc @ [headA])
-else merge listA tailB (acc @ [headB])) //Måske find måde hvor den tilføjer til starten af listen og så reverse, for hurtigere speed
-
+See assignment5.program.fs
 
 (B) Implement a similar Java (or C#) method
 static int[] merge(int[] xs, int[] ys)
@@ -27,6 +17,7 @@ xs and ys of integers may be built like this:
 int[] xs = { 3, 5, 12 };
 int[] ys = { 2, 3, 4, 7 };
 
+see Assignment5Csharp.program.cs
 
 
 Exercise 5.7 Extend the monomorphic type checker to deal with lists. Use the following
@@ -35,27 +26,27 @@ type typ =
 | ...
 | TypL of typ (* list, element type is typ *)
 
+Check TypedFun.fs
+
 
 Exercise 6.1 Download and unpack fun1.zip and fun2.zip and build the
 micro-ML higher-order evaluator as described in file README.TXT point E.
 Then run the evaluator on the following four programs. Is the result of the third
 one as expected? Explain the result of the last one:
-let add x = let f y = x+y in f end
-in add 2 5 end
 
-let add x = let f y = x+y in f end
-in let addtwo = add 2
-    in addtwo 5 end
-end
+let add x = let f y = x+y in f end in add 2 5 end
 
-let add x = let f y = x+y in f end
-in let addtwo = add 2
-    in let x = 77 in addtwo 5 end
-    end
-end
+let add x = let f y = x+y in f end in let addtwo = add 2 in addtwo 5 end end
 
-let add x = let f y = x+y in f end
-in add 2 end
+let add x = let f y = x+y in f end in let addtwo = add 2 in let x = 77 in addtwo 5 end end end
+Explained:
+add takes an x and returns a function that takes a y and returns x+y
+addtwo calls add with 2 as argument creating a function that takes a y and returns 2+y
+Then lastly we call addtwo 5 which gives the argument 5 to addtwo such that we get 2+5 = 7
+
+let add x = let f y = x+y in f end in add 2 end
+//Returns a curried function (A Fucntion closure), where x is applied with 2. 
+Basically returns (fun y -> 2+y)
 
 
 Exercise 6.2 Add anonymous functions, similar to F#’s fun x -> …, to the
@@ -83,27 +74,38 @@ Clos("z", Prim("+", Var "z", Var "y"), [(y,22)])
 Extend the evaluator eval in file HigherFun.fs to interpret such anonymous
 functions.
 
+Done:
+> run (fromString "fun x -> x + 2");;
+val it: HigherFun.value = Clos ("x", Prim ("+", Var "x", CstI 2), [])
+
+
  
 Exercise 6.3 Extend the micro-ML lexer and parser specifications in FunLex.fsl
 and FunPar.fsy to permit anonymous functions. The concrete syntax may be as
 in F#: fun x -> expr or as in Standard ML: fn x => expr, where x is a
 variable. The micro-ML examples from Exercise 6.1 can now be written in these two
 alternative ways:
-let add x = fun y -> x+y
-in add 2 5 end
-let add = fun x -> fun y -> x+y
-in add 2 5 end
+Done:
+let add x = fun y -> x+y in add 2 5 end
+> run (fromString "let add x = fun y -> x+y in add 2 5 end");;
+val it: HigherFun.value = Int 7
+
+let add = fun x -> fun y -> x+y in add 2 5 end
+> run (fromString "let add = fun x -> fun y -> x+y in add 2 5 end");;
+val it: HigherFun.value = Int 7
 
  
 Exercise 6.4 This exercise concerns type rules for ML-polymorphism, as shown in Fig. 6.1.
-(i) Build a type rule tree for this micro-ML program (in the let-body, the type of f
-should be polymorphic – why?):
-let f x = 1
-in f f end
-(ii) Build a type rule tree for this micro-ML program (in the let-body, f should not
-be polymorphic – why?):
-let f x = if x<10 then 42 else f(x+1)
-in f 20 end
+(i) Build a type rule tree for this micro-ML program (in the let-body, the type of f should be polymorphic – why?):
+
+let f x = 1 in f f end
+Why polymorphic: Because the argument x is never used, therefore f can be called with anything, and still evalute to type t
+
+(ii) Build a type rule tree for this micro-ML program (in the let-body, f should not be polymorphic – why?):
+
+let f x = if x<10 then 42 else f(x+1) in f 20 end
+Why not polymorphic: Because the argument x is used in the if statement, therefore f can only be called with an int, and not anything else, in other words
+when calling if statements if(e1,e2,e3), then e1 needs to be a bool and e2 and e3 just needs to be the same type, and e2 is int, therefore e3 needs to be int.
 
  
 Exercise 6.5 Download fun2.zip and build the micro-ML higher-order type
@@ -112,37 +114,57 @@ inference as described in file README.TXT point F.
 type the program has. Some of the type inferences will fail because the programs are
 not typable in micro-ML; in those cases, explain why the program is not typable:
 
-let f x = 1
-in f f end
+let f x = 1 in f f end  //Int
 
-let f g = g g
-in f end
+let f g = g g in f end  //Breaks restriction 2: • Types must be finite and non-circular
 
-let f x =
-    let g y = y
-    in g false end
-in f 42 end
+let f x = let g y = y in g false end in f 42 end    //Bool
 
-let f x =
-    let g y = if true then y else x
-    in g false end
-in f 42 end
+let f x = let g y = if true then y else x in g false end in f 42 end    //Parameters are never polymorphic. Here the param is both a bool and int, which is illegal.
 
-let f x =
-    let g y = if true then y else x
-    in g false end
-in f true end
+let f x = let g y = if true then y else x in g false end in f true end  //Bool
 
 (2) Write micro-ML programs for which the micro-ML type inference report the
 following types:
 • bool -> bool
+> inferType (fromString "let f x = if x then true else false in f end");;
+val it: string = "(bool -> bool)"
+
+
 • int -> int
+> inferType (fromString "let f x = if true then 3 else x in f end");;
+val it: string = "(int -> int)"
+
+
 • int -> int -> int
+> inferType (fromString "let f x = let g y = let h z = 1 in x + y end in g end in f end ");;
+val it: string = "(int -> (int -> int))"
+
+
+
 • ’a -> ’b -> ’a
+> inferType (fromString "let f x = let g y = let h z = 1 in x end in g end in f end ");;
+val it: string = "('j -> ('i -> 'j))"
+
+
 • ’a -> ’b -> ’b
+> inferType (fromString "let f x = let g y = let h z = 1 in y end in g end in f end ");;
+val it: string = "('i -> ('j -> 'j))"
+
+
 • (’a -> ’b) -> (’b -> ’c) -> (’a -> ’c)
+//In normal F# syntax it is let compose f g = fun x -> g (f x). Can you write it with inferType, using let and not fun
+> inferType (fromString "let f g = let h x = g (f x) in f end");;
+
+inferType (fromString "let f a = let g b = a g in g a end in f end");;
+
+
 • ’a -> ’b
+
+
 • ’a
+//This function takes no params, and returns a type variable
+inferType (fromString "let 
 
 Remember that the type arrow (->) is right associative, so int -> int -> int
 is the same as int -> (int -> int), and that the choice of type variables
