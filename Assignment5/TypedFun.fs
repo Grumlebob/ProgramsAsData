@@ -51,7 +51,7 @@ type tyexpr =
     | Letfun of string * string * typ * tyexpr * typ * tyexpr
     (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
     | Call of tyexpr * tyexpr
-    | List of tyexpr list (*5.7 *)
+    | List of tyexpr list * typ (*5.7 *)
 
 (* A runtime value is an integer or a function closure *)
 
@@ -98,7 +98,7 @@ let rec eval (e: tyexpr) (env: value env) : int =
             eval fBody fBodyEnv
         | _ -> failwith "eval Call: not a function"
     | Call _ -> failwith "illegal function in Call"
-    | List list ->
+    | List (list,_) ->
         List.fold (fun acc x -> acc + eval x env) 0 list
         
   
@@ -151,8 +151,10 @@ let rec typ (e: tyexpr) (env: typ env) : typ =
                 failwith "Call: wrong argument type"
         | _ -> failwith "Call: unknown function"
     | Call(_, eArg) -> failwith "Call: illegal function in call"
-    | List (head::_) ->typ head env
-    | List _ -> failwith "List: empty list"
+    | List ([],typeOfList) -> failwith "List: empty list"
+    | List (listOfTypes, typeOfList) ->
+        let areTheyAllSameType = List.fold (fun acc x -> if acc = false then false else if ((typ x env) = typeOfList) then true else false) true listOfTypes 
+        if areTheyAllSameType = true then TypL typeOfList else failwith "Different types in the list"
         
 
 let typeCheck e = typ e []

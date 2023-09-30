@@ -125,6 +125,11 @@ let f x = let g y = if true then y else x in g false end in f 42 end    //Parame
 let f x = let g y = if true then y else x in g false end in f true end  //Bool
 
 (2) Write micro-ML programs for which the micro-ML type inference report the
+Remember that the type arrow (->) is right associative, so int -> int -> int
+is the same as int -> (int -> int), and that the choice of type variables
+does not matter, so the type scheme ’h -> ’g -> ’h is the same as a’ ->
+’b -> ’a.
+
 following types:
 • bool -> bool
 > inferType (fromString "let f x = if x then true else false in f end");;
@@ -141,7 +146,6 @@ val it: string = "(int -> int)"
 val it: string = "(int -> (int -> int))"
 
 
-
 • ’a -> ’b -> ’a
 > inferType (fromString "let f x = let g y = let h z = 1 in x end in g end in f end ");;
 val it: string = "('j -> ('i -> 'j))"
@@ -152,21 +156,20 @@ val it: string = "('j -> ('i -> 'j))"
 val it: string = "('i -> ('j -> 'j))"
 
 
-• (’a -> ’b) -> (’b -> ’c) -> (’a -> ’c)
-//In normal F# syntax it is let compose f g = fun x -> g (f x). Can you write it with inferType, using let and not fun
-> inferType (fromString "let f g = let h x = g (f x) in f end");;
-
+• (’a -> ’b) -> (’b -> ’c) -> (’a -> ’c) //In normal F# syntax it is let compose f g = fun x -> g (f x)
+> inferType (fromString "let f x = let g y =  let h z = y (x z) in h end in g end in f end");;
+val it: string = "kør og skriv ind
+//Thors latest example:
 inferType (fromString "let f a = let g b = a g in g a end in f end");;
 
 
 • ’a -> ’b
-
+> inferType (fromString "let f x = let g = f x in g end in f end");;
+val it: string = "kør og skriv ind
 
 • ’a
-//This function takes no params, and returns a type variable
-inferType (fromString "let 
+> inferType (fromString let f x = f 1 in f 4 end");;
+val it: string = "kør og skriv ind
 
-Remember that the type arrow (->) is right associative, so int -> int -> int
-is the same as int -> (int -> int), and that the choice of type variables
-does not matter, so the type scheme ’h -> ’g -> ’h is the same as a’ ->
-’b -> ’a.
+
+
