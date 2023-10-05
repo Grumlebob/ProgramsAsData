@@ -24,17 +24,3 @@ let mergeResult = merge [3;5;12] [2;3;4;7] []
 printfn "mergeResult: %A" mergeResult
 
 
-// Give me a function that has the following signature:
-//(’a -> ’b) -> (’b -> ’c) -> (’a -> ’c)
-
-let compose f g = fun x -> g (f x)
-
-type A = A
-type B = B
-type C = C
-let atob (a:A) = B
-let btoc (b:B) = C
-
-
-let f ac = let abbc ab = let ac = ab ac in ab ac in abbc
-
