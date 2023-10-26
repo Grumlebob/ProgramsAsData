@@ -21,8 +21,8 @@ val it: Machine.instr list =
    ADD; ...]
 
 > #q;;
-PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> javac .\Machine.java
-PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> java Machine ex11.out 8
+> javac .\Machine.java
+> java Machine ex11.out 8
 1 5 8 6 3 7 2 4
 1 6 8 3 7 4 2 5
 1 7 4 6 8 2 5 3
@@ -149,7 +149,7 @@ void main(int n) {
 }
 
 We know that assignment asks for arg of 4, but since this is simply a for i loop, an input of 2 is sufficient to explain the instructions.
-PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> java Machinetrace ex3.out 2
+> java Machinetrace ex3.out 2
 [ ]{0: LDARGS}                           | Puts argument on top of stack (2)
 [ 2 ]{1: CALL 1 5}                       | Call main with 1 argument (top value of stack) at address/label 5
 [ 4 -999 2 ]{5: INCSP 1}                 | Return address is 4, old basepointer is -999 (because no stack frames), 2 is our value. INCSP 1, allocates 1 place on our stack
@@ -233,7 +233,7 @@ PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> java Mach
 
 java Machinetrace ex3.out 4 > ex3trace.txt
 
-PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> java .\Machine.java ex3.out 10
+> java .\Machine.java ex3.out 10
 0 1 2 3 4 5 6 7 8 9
 
 Note: the -999 is old base pointer. But since there is no additional stack frames, there is no old base pointer
@@ -376,25 +376,7 @@ ex3trace.txt:
 
 
 
-
-
-ex5.c:
-void main(int n) {
-  int r; 
-  r = n;
-  { 
-    int r;
-    square(n, &r);
-    print r;
-  }
-  print r;
-}
-
-void square(int i, int *rp) {
-  *rp = i * i;
-}
-
-
+ex5.c compiled:
 
 [ ]{0: LDARGS}                  |
 [ 7 ]{1: CALL 1 5}              | call main with aug (7)
@@ -453,7 +435,6 @@ void square(int i, int *rp) {
 [ 7 ]{4: STOP}                      | wrap up and return
 
 
-
 Exercise 8.3 This abstract syntax for preincrement ++e and predecrement --e was
 introduced in Exercise 7.4:
 type expr =
@@ -500,7 +481,7 @@ val it: Machine.instr list =
    DUP; LDI; CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 1; ADD; LDI; PRINTI;
    INCSP -1; INCSP -1; RET 0]
 
-PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment7> java Machine Exercise83.out 1
+> java Machine Exercise83.out 1
 9 10
 
 See files comp.fs, CPar.fsy, CLex.fsl
@@ -555,7 +536,29 @@ be the same as for the conditional statement if (e) stmt1 else stmt2, but
 expression e2 or expression e3 must leave its value on the stack top if evaluated, so
 that the entire expression e1 ? e2 : e3 leaves its value on the stack top.
 
+Absyn:
+  | Ternary of expr * expr * expr    (* Conditional expression      *)
 
+Clex:
+  | ':'             { COLON }
+  | '?'             { QUESTIONMARK }  
+  
+Cpar.fsy:
+  | LPAR Expr QUESTIONMARK Expr COLON Expr RPAR { Ternary($2, $4, $6)       }
+
+Comp.fs:
+    | Ternary(e1, e2, e3) -> //evaluate e1, if true go to e2 else go to e3
+      let labFalse = newLabel() //in case e1 is false
+      let labend   = newLabel() //To jump after call
+      cExpr e1 varEnv funEnv @ [IFZERO labFalse] //if e1 is false, jump to e3
+      @ cExpr e2 varEnv funEnv @ [GOTO labend; Label labFalse] //label False for e3, written ahead of e2 to skip it.
+      @ cExpr e3 varEnv funEnv //if e1 is false, we skip previous line.
+      @ [Label labend] 
+
+
+>java Machine Exercise85.out 
+5
+This correct. The ternary statement is 1 < 5 ? print e2 : print e3;, where e2 is 5 and e3 is 7.
 
 Exercise 8.6
  (SEE SLIDES- DER ER KODE I SLIDES:
@@ -577,3 +580,24 @@ must be an integer constant, and a case must be followed by a statement block. A
 switch with n cases can be compiled using n labels, the last of which is at the very
 end of the switch. For simplicity, do not implement the break statement or the
 default branch.
+
+See Absyn, CPar.fsy, CLex.fsl, Comp.fs, Exercise86.c
+
+> open ParseAndComp;;
+> compileToFile (fromFile "Exercise86.c") "Exercise86.out";;
+val it: Machine.instr list =
+  [LDARGS; CALL (0, "L1"); STOP; Label "L1"; INCSP 1; INCSP 1; INCSP 1; GETBP;
+   CSTI 1; ADD; CSTI 2; STI; INCSP -1; GETBP; CSTI 2; ADD; CSTI 4; STI;
+   INCSP -1; GETBP; CSTI 1; ADD; LDI; DUP; CSTI 2; SUB; IFNZRO "L3"; GETBP;
+   CSTI 0; ADD; CSTI 28; STI; INCSP -1; GETBP; CSTI 2; ADD; LDI; CSTI 4; MOD;
+   CSTI 0; EQ; IFZERO "L4"; GETBP; CSTI 0; ADD; CSTI 29; STI; INCSP -1;
+   GOTO "L5"; Label "L4"; INCSP 0; Label "L5"; INCSP 0; GOTO "L2"; Label "L3";
+   DUP; CSTI 3; SUB; IFNZRO "L6"; GETBP; CSTI 0; ADD; CSTI 31; STI; INCSP -1;
+   INCSP 0; GOTO "L2"; Label "L6"; DUP; CSTI 1; SUB; IFNZRO "L7"; GETBP;
+   CSTI 0; ADD; CSTI 31; STI; INCSP -1; INCSP 0; GOTO "L2"; Label "L7";
+   Label "L2"; INCSP -1; GETBP; CSTI 0; ADD; LDI; PRINTI; INCSP -1; INCSP -3;
+   RET -1]
+
+> java Machine .\Exercise86.out
+29 
+

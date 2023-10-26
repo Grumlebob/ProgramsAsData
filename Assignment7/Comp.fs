@@ -122,7 +122,17 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) : instr list =
       cExpr e varEnv funEnv @ [IFZERO labelse] 
       @ cStmt stmt1 varEnv funEnv @ [GOTO labend]
       @ [Label labelse] @ cStmt stmt2 varEnv funEnv
-      @ [Label labend]           
+      @ [Label labend]
+    | Switch(toMatch, tuples) ->
+        let labend  = newLabel()
+        let result = cExpr toMatch varEnv funEnv
+        
+        
+        List.fold (fun acc (casenumber, blockToBeExecuted) -> 
+            let nextCase = newLabel()
+            acc @ [DUP; CSTI casenumber; SUB; IFNZRO nextCase;] @ cStmt blockToBeExecuted varEnv funEnv @ [GOTO labend] @ [Label nextCase]
+        ) result tuples @ [Label labend; INCSP -1]
+
     | While(e, body) ->
       let labbegin = newLabel()
       let labtest  = newLabel()
@@ -169,13 +179,13 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list =
     | CstI i         -> [CSTI i]
     | PreDec acc -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; SUB; STI]
     | PreInc acc -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; ADD; STI]
-    | Ternary(e1, e2, e3) -> 
-      let labfalse = newLabel()
-      let labend   = newLabel()
-      cExpr e1 varEnv funEnv
-      @ [IFZERO labfalse]
-      @ cExpr e2 varEnv funEnv
-      @ [GOTO labend; Label labfalse] @ cExpr e3 varEnv funEnv @ [Label labend]
+    | Ternary(e1, e2, e3) -> //evaluate e1, if true go to e2 else go to e3
+      let labFalse = newLabel() //in case e1 is false
+      let labend   = newLabel() //To jump after call
+      cExpr e1 varEnv funEnv @ [IFZERO labFalse] //if e1 is false, jump to e3
+      @ cExpr e2 varEnv funEnv @ [GOTO labend; Label labFalse] //label False for e3, written ahead of e2 to skip it.
+      @ cExpr e3 varEnv funEnv //if e1 is false, we skip previous line.
+      @ [Label labend]
     | Addr acc       -> cAccess acc varEnv funEnv
     | Prim1(ope, e1) ->
       cExpr e1 varEnv funEnv

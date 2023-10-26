@@ -93,8 +93,9 @@
         <Content Include="wrapUpEx01.out" />
         <Content Include="CLex.fsl" />
         <Content Include="CPar.fsy" />
-        <ClCompile Include="Exercise85.c" />
         <ClCompile Include="Exercise83.c" />
+        <ClCompile Include="Exercise85.c" />
+        <ClCompile Include="Exercise86.c" />
     </ItemGroup>
 
 </Project>

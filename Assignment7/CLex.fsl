@@ -21,6 +21,8 @@ let keyword s =
     | "false"   -> CSTBOOL 0
     | "if"      -> IF
     | "int"     -> INT
+    | "switch"  -> SWITCH
+    | "case"    -> CASE
     | "null"    -> NULL
     | "print"   -> PRINT
     | "println" -> PRINTLN
@@ -79,6 +81,7 @@ rule Token = parse
   | ','             { COMMA }
   | ':'             { COLON }
   | '?'             { QUESTIONMARK }  
+  
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }
   | '"'             { CSTSTRING (String [] lexbuf) }
