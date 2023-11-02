@@ -3,9 +3,9 @@ namespace Assignment8;
 public class Selsort
 {
 
-    static void Main(string[] args)
+    /*static void Main(string[] args)
     {
-    }
+    }*/
 
     public static void SelectionSort(int[] arr) {
         for (int i = 0; i < arr.Length; i++) {

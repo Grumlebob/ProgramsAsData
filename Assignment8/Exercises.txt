@@ -71,3 +71,13 @@ from within Visual Studio) and measure the time spent in garbage collection usin
 the perfmon as above. Note: It is very important that you attach the performance
 counter to the particular process (“instance”) that you want to measure, in the step
 marked (***) above, otherwise the results will be meaningless.
+
+---------Observations--------
+
+A screenshot of permon can be found in same folder, StringConcatSpeedObservation.png
+
+We notice how without stringbuilder, the program spent 50% of its time in garbage collection.
+This is due to the fact, when concattenating strings, it will make a new array, with added size for the string, that is to be added
+And then every char is copied from the old shorter array, to the new longer array, with additional new string.
+Thus when garbage collecting, it has to remove the old array, that it copied from.
+This happens a lot, because it adds 30000 strings, thus needs to remove 29999 old arrays.

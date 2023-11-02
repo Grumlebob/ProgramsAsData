@@ -1,0 +1,59 @@
+  public static void SelectionSort(int[]);
+    descriptor: ([I)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=4, args_size=1
+         0: iconst_0 //0
+         1: istore_1 //i = 0
+         2: iload_1 //get i
+         3: aload_0 //get array
+         4: arraylength //array length
+         5: if_icmpge     57 //if not i < array length, return
+         8: iload_1 //i
+         9: istore_2 //least = i
+        10: iload_1 //i
+        11: iconst_1 //1
+        12: iadd // i + 1
+        13: istore_3 //j ? i + 1
+        14: iload_3 //get j
+        15: aload_0 //get array (technically a prefix stands for address)
+        16: arraylength //array length
+        17: if_icmpge     37 //if not j < array length, jump out of loop
+        20: aload_0 //array
+        21: iload_3 //j
+        22: iaload //array[j]
+        23: aload_0 //array
+        24: iload_2 //least
+        25: iaload //array[least]
+        26: if_icmpge     31 //if not array[j] < array[least], skip if
+        29: iload_3 //j
+        30: istore_2 //least = j
+        31: iinc          3, 1 //j++
+        34: goto          14 //back to top of inner loop
+        37: aload_0 //get array
+        38: iload_1 //i
+        39: iaload //array[i]
+        40: istore_3 //temp = array[i]
+        41: aload_0 //get array
+        42: iload_1 //i
+        43: aload_0 //get array
+        44: iload_2 //least
+        45: iaload //array[least]
+        46: iastore //array[i] = array[least]
+        47: aload_0 //get array
+        48: iload_2 //least
+        49: iload_3 //temp
+        50: iastore //array[least] = temp
+        51: iinc          1, 1 //i++
+        54: goto          2 //back to top of outer loop
+        57: return
+      LineNumberTable:
+        line 21: 0
+        line 22: 8
+        line 23: 10
+        line 24: 20
+        line 25: 29
+        line 23: 31
+        line 26: 37
+        line 21: 51
+        line 28: 57
