@@ -1,14 +1,23 @@
 namespace Assignment8;
 
+using System;
+using System.Text;		// For StringBuilder
+using System.Diagnostics;       // For Stopwatch
+using System.Linq;
+
 public class MergeSort
 {
     private static int[] aux;
 
     static void Main(string[] args)
     {
-        
-        var arr = Enumerable.Range(0, 10000).Reverse().ToArray();
+        var arr = Enumerable.Range(0, 10000000).Reverse().ToArray();
+        Console.WriteLine("Run slow");
+        Console.ReadLine();
         Sort(arr, 0, arr.Length - 1); //makes a lot of small temp arrays
+        arr = Enumerable.Range(0, 10000000).Reverse().ToArray();
+        Console.WriteLine("Run fast");
+        Console.ReadLine();
         aux = new int[arr.Length];
         SortEfficient(arr, 0, arr.Length - 1); //uses one big aux array
         for (int i = 0; i < arr.Length - 1; i++)

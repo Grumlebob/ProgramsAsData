@@ -72,8 +72,7 @@ the perfmon as above. Note: It is very important that you attach the performance
 counter to the particular process (“instance”) that you want to measure, in the step
 marked (***) above, otherwise the results will be meaningless.
 
----------Observations--------
-
+Answer for 9.2.ii
 A screenshot of permon can be found in same folder, StringConcatSpeedObservation.png
 
 We notice how without stringbuilder, the program spent 50% of its time in garbage collection.
@@ -81,3 +80,11 @@ This is due to the fact, when concattenating strings, it will make a new array, 
 And then every char is copied from the old shorter array, to the new longer array, with additional new string.
 Thus when garbage collecting, it has to remove the old array, that it copied from.
 This happens a lot, because it adds 30000 strings, thus needs to remove 29999 old arrays.
+
+Answer for 9.2.iii
+A screenshot of permon can be found in same folder, MergeSortPerformances.png
+
+We have made two versions of merge sort. First version allocates an array every time it merges. 
+These arrays will be dead after every merge and should trigger a lot of garbage collection.
+The other version called SortEfficient allocates one big array once that it uses throughout the sorting, 
+which wont die until the entire sorting is done resulting in fewer garbage collections. 
