@@ -601,7 +601,7 @@ int isPointerToHeap(word v)
 void mark(word* block)
 {
     if (Color(block[0]) == Black) return; //skip already visited
-    printf("Paint black %d \n", block[0]);
+    
     block[0] = Paint(block[0], Black); //reached from root, can't be collected
     for (int i = 1; i < Length(block[0]); i++)
     {
@@ -634,27 +634,27 @@ void sweepPhase()
     word* index = heap;
     while (index < afterHeap)
     {
-        word* cons = index;
-        if (Color(cons[0]) == Black)
+        word* currentBlock = index;
+        if (Color(currentBlock[0]) == Black)
         {
-            cons[0] = Paint(cons[0], White);
+            currentBlock[0] = Paint(currentBlock[0], White);
         }
-        else if (Color(cons[0]) == White)
+        else if (Color(currentBlock[0]) == White)
         {
-            cons[0] = Paint(cons[0], Blue);
-            word* next = (word*)Length(cons[0]) + 1;
-            if (Color(next[0]) == Blue) //two adjacent free blocks
+            currentBlock[0] = Paint(currentBlock[0], Blue);
+            word* next = Length(currentBlock[0]) + currentBlock + 1;
+            if (inHeap(next) && Color(next[0]) == Blue) //two adjacent free blocks
             {
-                next[0] = mkheader(BlockTag(next[0]), Length(next[0] + Length(cons[0] + 1)), Blue);
-                next[1] = (word)freelist; //insert pointer to prev block
+                currentBlock[0] = mkheader(BlockTag(currentBlock[0]),Length(next[0]) + Length(currentBlock[0]), Blue);
+                currentBlock[1] = (word)freelist; //insert pointer to prev block
             }
             else
             {
-                cons[1] = (word)freelist; //insert pointer to prev block
+                currentBlock[1] = (word)freelist; //insert pointer to prev block
             }
-            freelist = cons; //move to next block
+            freelist = currentBlock; //move to next block
         } //using length to implicitly traverse the entire heap (it is important that the sweep phase does not use the next pointer, only the mark phase does)
-        index += Length(index[0]) + 1; //next heap element
+        index += Length(currentBlock[0]) + 1; //next heap element
     }
 }
 
