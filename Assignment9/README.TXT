@@ -1,6 +1,12 @@
 Compiling and loading the list-C evaluator and parser (file ListC/README)
 -------------------------------------------------------------------------
 
+Garbage collection opgaver instrucitoner:
+1. Cd ind i assignment9/listVM/listVM
+2. gcc -o listmachine listmachine.c
+3. ./listmachine ../../ex30.out 1000
+
+
 Archive listc.zip contains the files used below.
 
 
