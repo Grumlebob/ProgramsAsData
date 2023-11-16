@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XGAt7SD+/K0sPek4CZCtaNCLSSg5SVZS7VctDNEjZxsiCxmxDjL/cCOLLj5Kdsn42nWaH3vQxV3s1RakSToqzA==",
+  "dgSpecHash": "6IHsWIcU9gPIe66+xbWrNOWpAQ5XuqUwcAvUiXgQe1+wej1pvKzIM2k0N3LT8c6MB2lin19630TDkR2U0suOqQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\thorc\\OneDrive\\Dokumenter\\5. Semester\\Programmer som Data\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
+  "projectFilePath": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
   "expectedPackageFiles": [
-    "C:\\Users\\thorc\\.nuget\\packages\\fsharp.core\\7.0.200\\fsharp.core.7.0.200.nupkg.sha512"
+    "C:\\Users\\jgrum\\.nuget\\packages\\fsharp.core\\7.0.400\\fsharp.core.7.0.400.nupkg.sha512"
   ],
   "logs": []
 }
