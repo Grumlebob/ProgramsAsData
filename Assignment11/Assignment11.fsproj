@@ -1,0 +1,110 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Program.fs"/>
+        <Content Include="exercises.txt" />
+        <Content Include="Imp\README.TXT" />
+        <Content Include="Imp\Parameters.exe" />
+        <Compile Include="Imp\Parameters.cs" />
+        <Compile Include="Imp\Naive.fs" />
+        <ClCompile Include="Imp\array.c" />
+        <Content Include="Imp\a.out" />
+        <Content Include="MicroC\obj\fsac.cache" />
+        <Content Include="MicroC\wrapUpEx01.out" />
+        <Content Include="MicroC\wrapUpEx01.exe" />
+        <Compile Include="MicroC\Absyn.fs" />
+        <ClCompile Include="MicroC\wrapUpEx01.c" />
+        <ClCompile Include="MicroC\testing.c" />
+        <Content Include="MicroC\tailEx2.out" />
+        <Content Include="MicroC\tailEx.out" />
+        <ClCompile Include="MicroC\tailEx.c" />
+        <Content Include="MicroC\README.TXT" />
+        <Content Include="MicroC\prog1" />
+        <Content Include="MicroC\prog0" />
+        <Compile Include="MicroC\ParseAndRun.fs" />
+        <Compile Include="MicroC\ParseAndContcomp.fs" />
+        <Compile Include="MicroC\ParseAndComp.fs" />
+        <Compile Include="MicroC\Parse.fs" />
+        <Content Include="MicroC\out" />
+        <Compile Include="MicroC\MicroCC.fs" />
+        <Content Include="MicroC\microcc.exe" />
+        <Content Include="MicroC\Machinetrace.class" />
+        <Content Include="MicroC\Machine.java" />
+        <Compile Include="MicroC\Machine.fs" />
+        <Content Include="MicroC\Machine.class" />
+        <ClCompile Include="MicroC\machine.c" />
+        <Content Include="MicroC\machine" />
+        <Compile Include="MicroC\Interp.fs" />
+        <Content Include="MicroC\grammar.txt" />
+        <Content Include="MicroC\FSharp.Core.dll" />
+        <Content Include="MicroC\ex9.out" />
+        <ClCompile Include="MicroC\ex9.c" />
+        <Content Include="MicroC\ex8.out" />
+        <ClCompile Include="MicroC\ex8.c" />
+        <ClCompile Include="MicroC\ex7.c" />
+        <Content Include="MicroC\ex6.out" />
+        <ClCompile Include="MicroC\ex6.c" />
+        <Content Include="MicroC\ex5.out" />
+        <ClCompile Include="MicroC\ex5.c" />
+        <Content Include="MicroC\ex4.out" />
+        <ClCompile Include="MicroC\ex4.c" />
+        <Content Include="MicroC\ex3.out" />
+        <ClCompile Include="MicroC\ex3.c" />
+        <Content Include="MicroC\ex26.out" />
+        <ClCompile Include="MicroC\ex26.c" />
+        <Content Include="MicroC\ex25.out" />
+        <Content Include="MicroC\ex25.code" />
+        <ClCompile Include="MicroC\ex25.c" />
+        <ClCompile Include="MicroC\ex24.c" />
+        <Content Include="MicroC\ex23.out" />
+        <ClCompile Include="MicroC\ex23.c" />
+        <Content Include="MicroC\ex22.out" />
+        <ClCompile Include="MicroC\ex22.c" />
+        <Content Include="MicroC\ex21.out" />
+        <ClCompile Include="MicroC\ex21.c" />
+        <ClCompile Include="MicroC\ex20.c" />
+        <Content Include="MicroC\ex2.out" />
+        <ClCompile Include="MicroC\ex2.c" />
+        <Content Include="MicroC\ex19.out" />
+        <ClCompile Include="MicroC\ex19.c" />
+        <ClCompile Include="MicroC\ex18.c" />
+        <ClCompile Include="MicroC\ex17.c" />
+        <ClCompile Include="MicroC\ex16.c" />
+        <ClCompile Include="MicroC\ex15.c" />
+        <ClCompile Include="MicroC\ex14.c" />
+        <Content Include="MicroC\ex13.out" />
+        <ClCompile Include="MicroC\ex13.c" />
+        <Content Include="MicroC\ex12tailcall.out" />
+        <Content Include="MicroC\ex12notailcall.out" />
+        <Content Include="MicroC\ex12.out" />
+        <ClCompile Include="MicroC\ex12.c" />
+        <ClCompile Include="MicroC\exercise12_2.c" />
+        <ClCompile Include="MicroC\exercise12_2_notEq.c" />
+        <ClCompile Include="MicroC\exercise12_2_GT.c" />
+        <ClCompile Include="MicroC\exercise12_2_GTequal.c" />
+        <ClCompile Include="MicroC\exercise12_2_LT.c" />
+        <ClCompile Include="MicroC\exercise12_4.c" />
+        <Content Include="MicroC\ex11.out" />
+        <ClCompile Include="MicroC\ex11.c" />
+        <Content Include="MicroC\ex10.out" />
+        <ClCompile Include="MicroC\ex10.c" />
+        <Content Include="MicroC\ex1.out" />
+        <ClCompile Include="MicroC\ex1.c" />
+        <Content Include="MicroC\CPar.fsy" />
+        <Compile Include="MicroC\CPar.fsi" />
+        <Compile Include="MicroC\CPar.fs" />
+        <Content Include="MicroC\CPar.exe" />
+        <Compile Include="MicroC\Contcomp.fs" />
+        <Compile Include="MicroC\Comp.fs" />
+        <Content Include="MicroC\CLex.fsl" />
+        <Compile Include="MicroC\CLex.fs" />
+        <Content Include="MicroC\bar" />
+        <Content Include="MicroC\a.out" />
+    </ItemGroup>
+
+</Project>

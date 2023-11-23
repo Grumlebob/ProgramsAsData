@@ -1,0 +1,172 @@
+
+Exercise 12.1 
+The continuation-based micro-C compiler (file Contcomp.fs) still
+generates clumsy code in some cases. For instance, the statement (file ex16.c):
+if (n)
+{ }
+else
+print 1111;
+print 2222;
+is compiled to this machine code:
+GETBP; LDI; IFZERO L3;              //get n, if n==0 goto L3
+GOTO L2;                            //go to after if/else block
+L3: CSTI 1111; PRINTI; INCSP -1;    //if n==0, print 1111
+L2: CSTI 2222; PRINTI; RET 1        //after if/else, print 2222
+which could be optimized to this by inverting the conditional jump and deleting the GOTO L2 instruction:
+GETBP; LDI; IFNZRO L2;              //get n, if n!=0 goto L2
+L3: CSTI 1111; PRINTI; INCSP -1;    //if n==0, print 1111
+L2: CSTI 2222; PRINTI; RET 1        //after if/else, print 2222
+Improve the compiler to recognize this situation. It must recognize that it is about to
+generate code of this form:
+IFZERO L3; GOTO L2; Label L3; ....
+where the conditional jump jumps over an unconditional jump. Instead it should
+generate code such as this:
+IFNZRO L2; Label L3; ....
+Define a new auxiliary function addIFZERO lab3 C which tests whether C has
+the structure shown above. In the code generation for If(e,s1,s2) in cStmt,
+instead of doing IFZERO labelse:: code you must call the auxiliary to do
+the consing, as in addIFZERO labelse code.
+In fact, everywhere in the compiler where youwould previously just cons IFZERO
+lab onto something, you should call addIFZERO instead to make sure the code
+gets optimized.
+A similar optimization can be made for IFNZRO L3; GOTO L2; Label
+L3. This is done in much the same way.
+
+>java Machine ex16.out 0
+1111 2222
+>java Machine ex16.out 1
+2222
+
+These are the outputs we expected.
+>    contCompileToFile (fromFile "ex16.c") "ex16.out";;
+val it: Machine.instr list =
+  [LDARGS; CALL (1, "L1"); STOP; Label "L1"; GETBP; LDI; IFNZRO "L2";
+   Label "L3"; CSTI 1111; PRINTI; INCSP -1; Label "L2"; CSTI 2222; PRINTI;
+   RET 1]
+
+
+
+Exercise 12.2 
+Improve code generation in the continuation-based micro-C compiler
+so that a less-than comparison with constant arguments is compiled to its truth value.
+For instance, 11 < 22 should compile to the same code as true, and 22 < 11
+should compile to the same code as false. This can be done by a small extension
+of the addCST function in Contcomp.fs.
+
+Further improve the code generation so that all comparisons with constant arguments
+are compiled to the same code as true (e.g. 11 <= 22 and 11 != 22
+and 22 > 11 and 22 >= 11) or false.
+Check that if (11 <=22) print 33; compiles to code that unconditionally
+executes print 33 without performing any test or jump.
+
+See files: exercise12_2.c_x for sample code
+
+>    compile "exercise12_2";;
+val it: Machine.instr list =
+  [LDARGS; CALL (0, "L1"); STOP; Label "L1"; CSTI 33; PRINTI; RET 0;
+   Label "L2"; RET -1]
+
+PS C:\Programming\FSharp\ProgrammerSomData\ProgramsAsData\Assignment11\MicroC> java Machine exercise12_2.out
+33 
+
+As seen, our CSTI 11 and CSTI 22 is gone, and only the print remains. This is what we expected.
+ 
+ 
+ > contCompileToFile (fromFile "exercise12_2_GT.c") "exercise12_2_GT.out";;
+ val it: Machine.instr list =
+   [LDARGS; CALL (0, "L1"); STOP; Label "L1"; CSTI 33; PRINTI; RET 0;
+    Label "L2"; RET -1]
+
+
+> contCompileToFile (fromFile "exercise12_2_GTequal.c") "exercise12_2_GTequal.out";;
+val it: Machine.instr list =
+  [LDARGS; CALL (0, "L1"); STOP; Label "L1"; CSTI 33; PRINTI; RET 0;
+   Label "L2"; RET -1]
+
+> contCompileToFile (fromFile "exercise12_2_LT.c") "exercise12_2_LT.out";;          
+val it: Machine.instr list =
+  [LDARGS; CALL (0, "L1"); STOP; Label "L1"; CSTI 33; PRINTI; RET 0;
+   Label "L2"; RET -1]
+
+ 
+Exercise 12.3 
+Extend the micro-C abstract syntax (file Absyn.fs) with conditional
+expressions Cond(e1, e2, e3), corresponding to this concrete syntax
+(known from C, C++, Java and C#):
+e1 ? e2 : e3
+The expression Cond(e1, e2, e3) must evaluate e1, and if the result is nonzero,
+must evaluate e2, otherwise e3. (If you want to extend also the lexer and
+parser to accept this new syntax, then note that ? and : are right associative; but
+implementing them in the lexer and parser is not strictly necessary for this exercise).
+Schematically, the conditional expression should be compiled to the code shown
+below:
+<e1>
+IFZERO L1
+<e2>
+GOTO L2
+L1: <e3>
+L2:
+Extend the continuation-based micro-C compiler (file Contcomp.fs) to compile
+conditional expressions to stack machine code. Your compiler should optimize code
+while generating it. Check that your compiler compiles the following two examples
+to code that works properly:
+true ? 1111 : 2222            false ? 1111 : 2222
+The first one has abstract syntax Cond(CstI 1, CstI 1111, CstI 2222).
+Unless you have implemented conditional expressions (e1 ? e2 : e3) in the
+lexer and parser, the simplest way to experiment with this is to invoke the cExpr
+expression compilation function directly, like this, where the two first [] represent
+empty environments, and the last one is an empty list of instructions:
+cExpr (Cond(CstI 1, CstI 1111, CstI 2222))
+([], 0) [] [];
+Do notwaste too much effort trying to get your compiler to optimize away everything
+that is not needed. This seems impossible without traversing and modifying already
+generated code.
+
+> cStmt (Cond(CstI 1, CstI 1111, CstI 2222)) ([], 0) [] [];;                      
+val it: Machine.instr list =
+  [CSTI 1111; GOTO "L3"; Label "L4"; CSTI 2222; Label "L3"]
+
+> cStmt (Cond(CstI 0, CstI 1111, CstI 2222)) ([], 0) [] [];;
+val it: Machine.instr list = [Label "L6"; CSTI 2222; Label "L5"]
+
+This is what we expected.
+
+ 
+ 
+Exercise 12.4 
+The compilation of the short-cut logical operators (&&) and (||) in
+Contcomp.fs is rather complicated. After Exercise 12.3 one can implement them
+in a somewhat simpler way, using these equivalences:
+e1 && e2 is equivalent to (e1 ? e2 : 0)
+e1 || e2 is equivalent to (e1 ? 1 : e2)
+Implement the sequential logical operators (&& and ||) this way in your extended
+compiler from Exercise 12.3. You should change the parser specification
+in CPar.fsy to build Cond(...) expressions instead of Andalso(...) or
+Orelse(...). Test this approach on file ex13.c and possibly other examples.
+How does the code quality compare to the existing complicated compilation of &&
+and ||?
+
+Existing complicated compilation of code:
+> compile "ex13";;
+val it : Machine.instr list =
+  [LDARGS; CALL (1, "L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 1; ADD;
+   CSTI 1889; STI; INCSP -1; GOTO "L3"; Label "L2"; GETBP; CSTI 1; ADD; GETBP;
+   CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 1; ADD; LDI;
+   CSTI 4; MOD; IFNZRO "L3"; IFZERO "L4"; Label "L4"; GETBP; CSTI 1; ADD; LDI;
+   PRINTI; INCSP -1; Label "L3"; GETBP; CSTI 1; ADD; LDI; GETBP; LDI; LT;
+   IFNZRO "L2"; RET 1]
+   
+Our new compilation of code:
+
+val it: Machine.instr list =
+  [LDARGS; CALL (1, "L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 1; ADD;
+   CSTI 1889; STI; INCSP -1; GOTO "L3"; Label "L2"; GETBP; CSTI 1; ADD; GETBP;
+   CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 1; ADD; LDI;
+   CSTI 4; MOD; IFNZRO "L5"; GETBP; CSTI 1; ADD; LDI; CSTI 100; MOD;
+   IFZERO "L6"; CSTI 1; GOTO "L4"; Label "L6"; GETBP; CSTI 1; ADD; LDI;
+   CSTI 400; MOD; NOT; GOTO "L4"; Label "L5"; CSTI 0; Label "L4"; IFZERO "L3";
+   GETBP; CSTI 1; ADD; LDI; PRINTI; INCSP -1; Label "L3"; GETBP; CSTI 1; ADD;
+   LDI; GETBP; LDI; LT; IFNZRO "L2"; RET 1]
+
+While the bytecode is longer, it utilizes a single Conditional expression instead of andalso and orelse, which is what we expected.
+
