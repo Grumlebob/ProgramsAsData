@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\Assignment1.fsproj": {}
+    "C:\\Users\\jgrum\\Documents\\Programming\\FSharp\\ProgramsAsData\\Assignment1\\Assignment1.fsproj": {}
   },
   "projects": {
-    "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\Assignment1.fsproj": {
+    "C:\\Users\\jgrum\\Documents\\Programming\\FSharp\\ProgramsAsData\\Assignment1\\Assignment1.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
+        "projectUniqueName": "C:\\Users\\jgrum\\Documents\\Programming\\FSharp\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
         "projectName": "Assignment1",
-        "projectPath": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
+        "projectPath": "C:\\Users\\jgrum\\Documents\\Programming\\FSharp\\ProgramsAsData\\Assignment1\\Assignment1.fsproj",
         "packagesPath": "C:\\Users\\jgrum\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\FSharp\\ProgrammerSomData\\ProgramsAsData\\Assignment1\\obj\\",
+        "outputPath": "C:\\Users\\jgrum\\Documents\\Programming\\FSharp\\ProgramsAsData\\Assignment1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jgrum\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,7 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.401\\FSharp\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\8.0.100\\FSharp\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,7 +39,7 @@
             "FSharp.Core": {
               "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
               "target": "Package",
-              "version": "[7.0.400, )",
+              "version": "[8.0.100, )",
               "generatePathProperty": true
             }
           },
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
