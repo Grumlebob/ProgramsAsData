@@ -28,7 +28,6 @@
 %nonassoc FUN FN TRY WITH RARROW
 %nonassoc IN
 %nonassoc IF ELSE
-%nonassoc FST SND
 %left SEQOR
 %left SEQAND
 %left EQ NE 
@@ -36,6 +35,7 @@
 %right CONS
 %left PLUS MINUS
 %left TIMES DIV MOD
+%nonassoc FST SND
 %nonassoc PRIM1 RAISE HEAD TAIL NOT           /* highest precedence  */
 
 %start Main
