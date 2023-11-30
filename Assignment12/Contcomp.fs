@@ -170,6 +170,11 @@ let rec cExpr (kind: int->var) (varEnv : varEnv) (e : expr<typ>) (C: instr list)
   | CstB (b,_) -> addCST (if b then 1 else 0) C
   | CstN _     -> NIL :: C
   | Var (x,_)  -> loadVar varEnv x C
+  | Pair(e1,e2,_) ->
+    let evaluated1 = cExpr kind varEnv e1 C
+    let evaluated2 = cExpr kind varEnv e2 evaluated1
+    PAIR :: evaluated2
+    
   | Prim1(ope,e1,_) ->
     cExpr kind varEnv e1 
       (match (ope,getTypExpr e1) with
@@ -180,6 +185,8 @@ let rec cExpr (kind: int->var) (varEnv : varEnv) (e : expr<typ>) (C: instr list)
          debug ("Warning: cExpr.Prim1: print not implemented on type " + (TypeInference.showType t)); C
        | ("hd",_)    -> CAR :: C  
        | ("tl",_)    ->  CDR :: C
+       | ("fst",_)    ->  CAR :: C
+       | ("snd",_)    ->  CDR :: C
        | ("isnil",_) -> NIL :: EQ :: C
        | _ -> failwith ("cExpr.Prim1 "+ope+" not implemented"))
   | Prim2(ope, e1, e2,_) ->

@@ -156,6 +156,7 @@ word* readfile(char* filename);
 #define CONSTAG 0
 #define NILVALUE 0
 #define CLOSTAG 1
+#define PAIRTAG 2
 
 // Heap size in words
 
@@ -273,6 +274,8 @@ void printInstruction(word p[], word pc) {
   case THROW:     printf("THROW"); break;
   case PUSHHDLR:  printf("PUSHHDLR " WORD_FMT, p[pc+1]); break;
   case POPHDLR:   printf("POPHDLR"); break;
+  case PAIR:     printf("PAIR"); break;
+  case PRINTP:   printf("PRINTP"); break;
   default:     printf("<unknown> " WORD_FMT, p[pc]); break; 
   }
 }
@@ -299,6 +302,15 @@ word mkheader(uword tag, uword length, unsigned int color) {
 #elif defined(ENV64)
   return (tag << 56) | (length << 2) | color;
 #endif
+}
+
+void printP (word i) {
+  word *consPtr = (word *)i;
+  word fstElement = consPtr[1];
+  word sndElement = consPtr[2];
+  printf(WORD_FMT " ", IsInt(fstElement) ? Untag(fstElement) : fstElement);
+  printf(WORD_FMT " ", IsInt(sndElement) ? Untag(sndElement) : sndElement);
+  
 }
 
 void printI (word i) {
@@ -555,6 +567,8 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       printC(s[sp]); break;
     case PRINTL:
       printL(s[sp]); break;
+    case PRINTP:
+      printP(s[sp]); break;
     case LDARGS: {
       int i;
       for (i=0; i<iargc; i++) // Push commandline arguments
@@ -679,6 +693,14 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       hr = Untag(s[sp-1]);
       s[sp-3] = s[sp];
       sp = sp - 3;
+    } break;
+    case PAIR: {
+        word* pairPointer = allocate(PAIRTAG, 2, s, sp); 
+        pairPointer[1] = (word)s[sp-1];  // First element of pair
+        pairPointer[2] = (word)s[sp]; // Second element of pair
+        s[sp-1] = (word)pairPointer; // Push pair pointer on stack
+        sp--; //Because we take two elements from stack and replace with 1, so stack size is reduced by 1.
+       
     } break;
     default:                  
       printf("Illegal instruction " WORD_FMT " at address " WORD_FMT " (" WORD_FMT ")\n", p[pc-1], pc-1, (word)&p[pc-1]);

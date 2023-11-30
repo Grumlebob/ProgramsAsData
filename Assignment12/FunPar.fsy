@@ -93,8 +93,8 @@ Expr:
   | Expr SEQOR Expr                     { OrElse($1, $3, None)                 }
   | Expr SEMICOLON Expr                 { Seq($1, $3, None)                    }
   | LPAR Expr COMMA Expr RPAR           { Pair($2, $4, None)                   }
-  | FST LPAR Expr RPAR                  { Prim1("fst", $3, None)               }
-  | SND LPAR Expr RPAR                  { Prim1("snd", $3, None)               }
+  | FST Expr                            { Prim1("fst", $2, None)               }
+  | SND Expr                            { Prim1("snd", $2, None)               }
 ;
 
 AtExpr:
