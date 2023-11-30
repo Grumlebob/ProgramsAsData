@@ -6,6 +6,9 @@ type token =
   | RPAR
   | SEMICOLON
   | COLON
+  | COMMA
+  | FST
+  | SND
   | CONS
   | NIL
   | HEAD
@@ -52,6 +55,9 @@ type tokenId =
     | TOKEN_RPAR
     | TOKEN_SEMICOLON
     | TOKEN_COLON
+    | TOKEN_COMMA
+    | TOKEN_FST
+    | TOKEN_SND
     | TOKEN_CONS
     | TOKEN_NIL
     | TOKEN_HEAD

@@ -213,6 +213,8 @@ int silent=0; /* Glocal boolean value to run the interpreter in silent mode. Def
 #define THROW 40
 #define PUSHHDLR 41
 #define POPHDLR 42
+#define PAIR 43
+#define PRINTP 44
 
 // We check for stack overflow in execcode inbetween execution of two byte code instructions.
 // Such instructions can increate the stack arbitraily, e.g., INCSP. The STACKSAFETYSIZE

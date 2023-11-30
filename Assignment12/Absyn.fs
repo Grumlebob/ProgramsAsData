@@ -2,7 +2,7 @@
 
 module Absyn
 
-type expr<'a> = 
+type expr<'a> = // 'a is the type of the annotation
   | CstI of int * 'a option
   | CstB of bool * 'a option
   | CstN of 'a option
@@ -18,6 +18,8 @@ type expr<'a> =
   | Let of valdec<'a> list * expr<'a>
   | Raise of expr<'a> * 'a option
   | TryWith of expr<'a> * exnvar * expr<'a>
+  | Pair of expr<'a> * expr<'a> * 'a option //1.3.5
+  
 and valdec<'a> =
   | Fundecs of (string * string * expr<'a>) list  (* Top level mutual recursive function declarations *)
   | Valdec of string * expr<'a>
@@ -58,6 +60,7 @@ let ppProg fPP p : string =
     | Fun(x,e,aOpt) -> "fn " + x + " -> " + (ppExpr' i e) + (fPP aOpt)
     | Call(e1,e2,tOpt,aOpt) -> (ppExpr' i e1) + (ppTail tOpt) + (ppExpr' i e2) + (fPP aOpt)
     | Raise(e,aOpt) -> "raise " + (ppExpr' i e) + (fPP aOpt)
+    | Pair(e1,e2,aOpt) -> "(" + (ppExpr' i e1) + ", " + (ppExpr' i e2) + ")" + (fPP aOpt)
     | TryWith(e1,exn,e2) -> "\n" + (indent (i+2)) + "(try " + (ppExpr' (i+4) e1) +
                             "\n" + (indent (i+2)) + "with " + (ppExnVar exn) + " -> " + (ppExpr' (i+4) e2) + ")"
   and ppExnVar = function
@@ -92,6 +95,7 @@ let rec getOptExpr e : 'a Option =
   | Prim2(ope,e1,e2,aOpt) -> aOpt
   | Prim1(ope,e,aOpt) -> aOpt
   | If(e1,e2,e3) -> getOptExpr e3       (* e2 and e3 has same type *)
+  | Pair(e1,e2,aOpt) -> aOpt
   | Fun(x,e,aOpt) -> aOpt
   | Call(e1,e2,t,aOpt) -> aOpt
   | Raise(e,aOpt) -> aOpt
@@ -110,6 +114,7 @@ let tailcalls p : program<'a> =
     | Seq(e1,e2,aOpt) -> Seq(tc' false e1,tc' tPos e2,aOpt)
     | Prim2(ope,e1,e2,aOpt) -> Prim2(ope,tc' false e1,tc' false e2,aOpt)
     | Prim1(ope,e,aOpt) -> Prim1(ope,tc' false e,aOpt)
+    | Pair(e1,e2,aOpt) -> Pair(tc' false e1,tc' false e2,aOpt)
     | If(e1,e2,e3) -> If(tc' false e1,tc' tPos e2,tc' tPos e3)
     | Fun(x,e,aOpt) -> Fun(x,tc' true e,aOpt)
     | Call(e1,e2,_,aOpt) -> Call(tc' false e1,tc' false e2,Some tPos,aOpt)
@@ -136,6 +141,7 @@ let rec freevars e : string Set =
   | Var (x,_)  -> set [x]
   | Prim1(ope,e1,_) -> freevars e1
   | Prim2(ope,e1,e2,_) -> (freevars e1) + (freevars e2)
+  | Pair(e1,e2,_) -> (freevars e1) + (freevars e2)
   | AndAlso(e1,e2,_) -> (freevars e1) + (freevars e2)
   | OrElse(e1,e2,_) -> (freevars e1) + (freevars e2)
   | Seq(e1,e2,_) -> (freevars e1) + (freevars e2)

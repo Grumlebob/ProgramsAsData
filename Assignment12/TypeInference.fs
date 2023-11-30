@@ -52,6 +52,7 @@ type typ =
   | TypV of typevar                     (* type variable              *)
   | TypL of typ                         (* lists                      *)
   | TypE                                (* Exception type             *)
+  | TypP of typ * typ                   (* pairs                      *)
 
 and tyvarkind =  
   | NoLink of string                    (* uninstantiated type var.   *)
@@ -94,6 +95,7 @@ let rec resolveType t0 =
     | _ -> t0
   | TypF(t1,t2) -> TypF(resolveType t1, resolveType t2)
   | TypL t -> TypL (resolveType t)
+  | TypP(t1,t2) -> TypP(resolveType t1, resolveType t2)
   | _ -> t0;
 
 let rec freeTypeVars t : typevar list = 
@@ -103,6 +105,7 @@ let rec freeTypeVars t : typevar list =
   | TypV tv     -> [tv]
   | TypF(t1,t2) -> union(freeTypeVars t1, freeTypeVars t2)
   | TypL t      -> freeTypeVars t
+  | TypP(t1,t2) -> union(freeTypeVars t1, freeTypeVars t2)
   | TypE        -> []
 
 let occurCheck tyvar tyvars =                     
@@ -133,6 +136,7 @@ let rec typeToString t : string =
   | TypV _       -> failwith "typeToString impossible"
   | TypF(t1, t2) -> "function"
   | TypL t       -> "list"
+  | TypP(t1, t2) -> "pair"
   | TypE         -> "exn"
             
 (* Unify two types, equating type variables with types as necessary *)
@@ -145,6 +149,7 @@ let rec unify t1 t2 : unit =
   | (TypB, TypB) -> ()
   | (TypF(t11, t12), TypF(t21, t22)) -> (unify t11 t21; unify t12 t22)
   | (TypL t1, TypL t2) -> unify t1 t2
+  | (TypP(t11, t12), TypP(t21, t22)) -> (unify t11 t21; unify t12 t22)
   | (TypE, TypE) -> ()
   | (TypV tv1, TypV tv2) -> 
     let (_, tv1level) = !tv1
@@ -198,6 +203,7 @@ let rec copyType subst t : typ =
               | (LinkTo t1, _) -> copyType subst t1
     loop subst
   | TypF(t1,t2) -> TypF(copyType subst t1, copyType subst t2)
+  | TypP(t1,t2) -> TypP(copyType subst t1, copyType subst t2)
   | TypL t      -> TypL(copyType subst t)  
   | TypI        -> TypI
   | TypB        -> TypB
@@ -225,6 +231,7 @@ let rec showType t : string =
       | (NoLink name, _) -> name
       | _                -> failwith "showType impossible"
     | TypF(t1, t2) -> "(" + pr t1 + " -> " + pr t2 + ")"
+    | TypP(t1, t2) -> "(" + pr t1 + " * " + pr t2 + ")"
     | TypL t       -> "(" + pr t + " list" + ")"
     | TypE         -> "exn"
   pr t 
@@ -261,6 +268,15 @@ let rec typExpr (lvl : int) (env : tenv) (e : expr<'a>) : typ * expr<typ> =
     | "isnil" -> let tv = TypV(newTypeVar lvl)
                  unify (TypL tv) t1;
                  (TypB,Prim1(ope,e1',Some TypB))
+    | "fst" ->
+      match t1 with
+      | TypP(t1,t2) ->
+       (t1,Prim1(ope,e1',Some t1))
+    | "snd" ->
+      match t1 with
+      | TypP(t1,t2) ->
+       (t2,Prim1(ope,e1',Some t2))
+    
     | _ -> failwith ("typ of Prim1 " + ope + " not implemented")
   | Prim2(ope,e1,e2,_) -> 
     let (t1,e1') = typExpr lvl env e1
@@ -313,6 +329,14 @@ let rec typExpr (lvl : int) (env : tenv) (e : expr<'a>) : typ * expr<typ> =
     let (rTyp,fBody') = typExpr lvl1 fBodyEnv fBody
     let tr = TypF(xTyp, rTyp)
     (tr,Fun(x,fBody',Some tr))
+  | Pair(expr1, expr2, aOption) ->
+    let (t1,e1') = typExpr lvl env expr1
+    let (t2,e2') = typExpr lvl env expr2
+    //Is unifying needed - Because the pairs might have different types, which is ok.
+    //unify t1 t2
+    let pairType = TypP(t1, t2)
+    (pairType,Pair(e1',e2',Some pairType))
+    
   | Call(eFun,eArg,tOpt,_) -> 
     let (tf,eFun') = typExpr lvl env eFun 
     let (tx,eArg') = typExpr lvl env eArg

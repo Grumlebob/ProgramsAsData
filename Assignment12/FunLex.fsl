@@ -43,7 +43,9 @@ let keyword s =
     | "try"       -> TRY
     | "with"      -> WITH
     | "raise"     -> RAISE
-    | "exception" -> EXN        
+    | "exception" -> EXN
+    | "fst"       -> FST        
+    | "snd"       -> SND
     | _           -> NAME s
 }
 
@@ -75,6 +77,7 @@ rule Token = parse
   | ':'             { COLON }
   | "::"            { CONS }
   | "->"            { RARROW }
+  | ','             { COMMA }
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
 

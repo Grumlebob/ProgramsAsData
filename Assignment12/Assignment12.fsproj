@@ -8,6 +8,7 @@
     <ItemGroup>
         <Content Include="Exercises.txt" />
         <Compile Include="Program.fs"/>
+        <Content Include="pair.sml" />
         <ClCompile Include="MsmlVM\src\utils_win.c" />
         <ClCompile Include="MsmlVM\src\utils_unix.c" />
         <ClCompile Include="MsmlVM\src\msmlmachine.c" />
@@ -24,12 +25,12 @@
         <Compile Include="FunPar.fs" />
         <Compile Include="FunPar.fsi" />
         <Content Include="FunPar.fsy" />
+        <Compile Include="TypeInference.fs" />
         <Compile Include="HigherFun.fs" />
         <Compile Include="Machine.fs" />
         <Compile Include="MicroSMLC.fs" />
         <Compile Include="ParseTypeAndRun.fs" />
         <Content Include="README.txt" />
-        <Compile Include="TypeInference.fs" />
         <Content Include="ex01.out" />
         <Content Include="ex01.sml" />
         <Content Include="ex02.out" />
