@@ -1,0 +1,72 @@
+1. Vis (i udklip) de modifikationer du har lavet til filerne. Giv en skriftlig forklaring på modifikationerne.
+----Absyn.fs------
+  | PrimN of string * expr list       (* N-ary primitive operator    *)
+
+----CLex.fsl -------
+    | "tup"     -> TUP
+    | "upd"     -> UPD
+    | "nth"     -> NTH   
+
+----CPar.fsy -------
+  | TUP LPAR Exprs1 RPAR                { PrimN("tup", $3)      }
+  | UPD LPAR Expr COMMA Expr COMMA Expr RPAR       { PrimN("upd",[$3;$5;$7] )  }
+  | NTH LPAR Expr COMMA Expr RPAR       { PrimN("nth", [$3;$5])  }
+
+----Machine.fs -------
+  | TUP of int  // create tuple with n fields
+  | UPD         //update tuple
+  | NTH         //get n'th element in tuple
+ 
+ 
+----Comp.fs ------- 
+| PrimN (operation, expressions) ->
+        cExprs expressions varEnv funEnv @
+        match operation with
+        | "tup" -> [TUP expressions.Length]
+        | "upd" -> [UPD]
+        | "nth" -> [NTH]
+
+----listmachine.c -------
+case TUP:
+      {
+        //in Tup n, find the n (number of arguments) on the stack:
+        word nArg = p[pc++];
+        //Allocate a tuple of size nArg on the heap
+        word* tupPointer = allocate(CONSTAG, nArg, s, sp);
+        int i;
+        //Take n args from the stack and put them in the allocated tuple on the heap
+        for (i = 1; i <= nArg; i++)
+        {
+          tupPointer[i] = Untag(s[sp - nArg + i]);
+        }
+        //remove the arguments from the stack
+        sp = sp - nArg + 1;
+        //push the pointer to the tuple on the stack
+        s[sp] = (word)tupPointer;
+      } break;
+    case UPD:
+      {
+        //33    UPD s, tuplePointer, index,value      ⇒ s, tuplePointer        Element at index i is updated with value v. The pointer p to the tuple is left on the stack.
+        word value = Untag(s[sp--]);
+        word index = Untag(s[sp--]);
+        word* tuplePointer = (word*)s[sp];
+        tuplePointer[index + 1] = value;
+      } break;
+    case NTH:
+      {
+         //34 NTH s, tuplePointer, index       ⇒ s, value      The value v at index i in the tuple p is left on the stack.
+        word index = Untag(s[sp--]);
+        word* tuplePointer = (word*)s[sp];
+        s[sp] = Tag(tuplePointer[index + 1]);
+      }break;
+
+2. Dokumenter ved at køre ovenstående eksempelprogram, at du får følgende uddata: 
+32 33 34 42 33 34 10 11 12 13 14 42.
+
+3. Antag at vi ønsker at implementere et primitiv printTuple(t), som kan udskrive indholdet af en tupel
+t på skærmen. Resultatet af printTuple(t) er tuplen selv. Giv en opskrift, på niveau med ovenstående
+opskrift, der forklarer hvorledes du vil gøre dette. Det er tilladt at ændre repræsentationen af tupler på
+hoben. Det er ikke et krav, at du implementerer printTuple.
+
+Vi er for dovne til at skrive en guide, men vi har implementeret det for øvelses skyld. 
+Gør med denne info hvad du har lyst til.

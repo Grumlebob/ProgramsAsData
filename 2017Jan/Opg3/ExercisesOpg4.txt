@@ -1,0 +1,85 @@
+1. Udvid lexer og parser, således at operatorerne |> og >> er understøttet. Du kan eksempelvis introducere to
+nye tokens PIPERIGHT for |> og COMPOSERIGHT for >>.
+Begge operatorer er venstre associative og har en præcedens svarende til lighed (token EQ i filen FunPar.fsy).
+Det betyder bl.a. at +, -, * og / alle har højere præcedens end |> og >>.
+Du kan genanvende den abstrakte syntaks Prim til de to nye operatorer, hvor operanderne er henholdsvis
+"|>” og ">>”.
+Parseren bør give følgende abstrakte syntaks for de to eksempler ovenfor:
+Letfun ("f","x",Prim ("+",Var "x",CstI 1),
+Prim ("|>",CstI 2,Var "f"))
+Letfun ("f","x",Prim ("+",Var "x",CstI 1),
+Letfun ("g","x",Prim ("+",Var "x",CstI 2),
+Prim (">>",Var "f",Var "g")))
+
+Examples:
+let f x = x + 1 in 2 |> f end
+val it: Absyn.expr =
+  Letfun ("f", "x", Prim ("+", Var "x", CstI 1), Prim ("|>", CstI 2, Var "f"))
+
+let f x = x + 1 in let g x = x + 2 in f >> g end end
+val it: Absyn.expr =
+  Letfun
+    ("f", "x", Prim ("+", Var "x", CstI 1),
+     Letfun
+       ("g", "x", Prim ("+", Var "x", CstI 2), Prim (">>", Var "f", Var "g")))
+
+
+
+
+
+
+2. Anvend parseren på nedenstående 3 eksempler og forklar den genererede abstrakte syntaks udfra reglerne
+om præcedens og associativitet af |> og >>. Forklar yderligere, for hvert eksempel, hvorvidt du mener, at
+den genererede syntaks bør repræsentere et validt micro-ML program.
+(a) 
+let f x = x+1 in
+    let g x = x+2 in
+        2 |> f >> g
+    end
+end
+
+val it: Absyn.expr =
+  Letfun
+    ("f", "x", Prim ("+", Var "x", CstI 1),
+     Letfun
+       ("g", "x", Prim ("+", Var "x", CstI 2),
+        Prim (">>", Prim ("|>", CstI 2, Var "f"), Var "g")))
+Due to the left associativity of the two new operations, it will pipe 2 into f before composing, 
+meaning it will try to compose a value (result of f 2) with a function g, which does not make sense.
+
+
+(b) 
+let f x = x+1 in
+   let g x = x+2 in
+        2 |> (f >> g)
+    end
+end
+
+val it: Absyn.expr =
+  Letfun
+    ("f", "x", Prim ("+", Var "x", CstI 1),
+     Letfun
+       ("g", "x", Prim ("+", Var "x", CstI 2),
+        Prim ("|>", CstI 2, Prim (">>", Var "f", Var "g"))))
+With the parenthesis it will compose f and g before piping 2 into the composed function, which makes sense, result is 5.
+
+
+(c) 
+let f x = x in
+    let g x = x in
+        2=2 |> (f >> g)
+    end
+end
+
+Here it evaluates 2=2 first to a boolean (because of left associativity), 
+and then tries to pipe that boolean into the composed function, which does make sense since the functions just returns the input, returning true.
+
+
+3. Figur 6.1 på side 98 i PLC viser typeinferensregler for funktionssproget vi har udvidet med |> og >>. Vi
+definerer følgende to typeregler for de nye operatorer:
+
+Angiv et typeinferenstræ for udtrykket
+let f x = x + 1 in 3 |> f end
+Du finder to eksempler på typeinferenstræer i figur 4.8 og 4.9 på side 70 i PLC
+
+Se Opg4_3.jpg

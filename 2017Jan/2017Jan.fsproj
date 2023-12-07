@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>_2017Jan</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="Opgave5\Exercises.txt" />
+        <Content Include="Opgave5\opg5.lc" />
+        <Compile Include="Opgave5\Comp.fs" />
+        <Compile Include="Opgave5\Absyn.fs" />
+        <Compile Include="Opgave5\CLex.fs" />
+        <Compile Include="Opgave5\CPar.fs" />
+        <Compile Include="Opgave5\CPar.fsi" />
+        <Compile Include="Opgave5\ListCC.fs" />
+        <Compile Include="Opgave5\Machine.fs" />
+        <Compile Include="Opgave5\Parse.fs" />
+        <Compile Include="Opgave5\ParseAndComp.fs" />
+        <Compile Include="Opgave5\resurrection.cs" />
+        <Compile Include="Program.fs"/>
+        <Compile Include="TypedFun.fs" />
+        <Content Include="Opg3\ExercisesOpg3.txt" />
+        <Content Include="Opg3\ExercisesOpg4.txt" />
+        <Content Include="Opg3\Opg4_3.jpg" />
+        <Compile Include="Opg3\Absyn.fs" />
+        <Compile Include="Opg3\Fun.fs" />
+        <Compile Include="Opg3\FunLex.fs" />
+        <Content Include="Opg3\FunLex.fsl" />
+        <Compile Include="Opg3\FunPar.fs" />
+        <Compile Include="Opg3\FunPar.fsi" />
+        <Content Include="Opg3\FunPar.fsy" />
+        <Compile Include="Opg3\HigherFun.fs" />
+        <Content Include="Opg3\LinkedList.java" />
+        <Compile Include="Opg3\Parse.fs" />
+        <Compile Include="Opg3\ParseAndRun.fs" />
+        <Compile Include="Opg3\ParseAndRunHigher.fs" />
+        <Compile Include="Opg3\ParseAndType.fs" />
+        <Content Include="Opg3\README.TXT" />
+        <Compile Include="Opg3\TypeInference.fs" />
+        <Content Include="Opgave5\CircularQueue.class" />
+        <Content Include="Opgave5\CircularQueue.java" />
+        <Content Include="Opgave5\CLex.fsl" />
+        <Content Include="Opgave5\CPar.fsy" />
+        <Content Include="Opgave5\ex11.out" />
+        <Content Include="Opgave5\ex30.lc" />
+        <Content Include="Opgave5\ex30.out" />
+        <Content Include="Opgave5\ex31.lc" />
+        <Content Include="Opgave5\ex31.out" />
+        <Content Include="Opgave5\ex32.lc" />
+        <Content Include="Opgave5\ex32.out" />
+        <Content Include="Opgave5\ex33.lc" />
+        <Content Include="Opgave5\ex33.out" />
+        <Content Include="Opgave5\ex34.lc" />
+        <Content Include="Opgave5\ex34.out" />
+        <Content Include="Opgave5\ex35.lc" />
+        <Content Include="Opgave5\ex35.out" />
+        <Content Include="Opgave5\ex36.lc" />
+        <Content Include="Opgave5\ex36.out" />
+        <Content Include="Opgave5\ex37.lc" />
+        <Content Include="Opgave5\ex37.out" />
+        <Content Include="Opgave5\exGC01.lc" />
+        <Content Include="Opgave5\exGC01.out" />
+        <Content Include="Opgave5\listcc.exe" />
+        <Content Include="Opgave5\listmachine" />
+        <Content Include="Opgave5\ListVM\.vs\ListVM\v14\.suo" />
+        <Content Include="Opgave5\ListVM\ListVM.sln" />
+        <Content Include="Opgave5\ListVM\ListVM.VC.db" />
+        <Content Include="Opgave5\ListVM\ListVM\listmachine" />
+        <Content Include="Opgave5\ListVM\ListVM\ListVM.vcxproj" />
+        <Content Include="Opgave5\ListVM\ListVM\ListVM.vcxproj.filters" />
+        <Content Include="Opgave5\ListVM\ListVM\ListVM.vcxproj.user" />
+        <Content Include="Opgave5\prog0" />
+        <Content Include="Opgave5\prog1" />
+        <Content Include="Opgave5\README.TXT" />
+        <Content Include="Opgave5\resurrection.exe" />
+        <Content Include="Opgave5\StringConcatSpeed.class" />
+        <Content Include="Opgave5\StringConcatSpeed.java" />
+        <Content Include="Opgave5\Timer.class" />
+        <None Include="Opg3\chap5.fsx" />
+        <None Include="Opg3\chap6.fsx" />
+        <None Include="Opg3\slowTypeInference.fsx" />
+        <Content Include="Opg3\TypedFun\README.TXT" />
+        <Content Include="jan2017.pdf" />
+        <Content Include="Opg4.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ClCompile Include="Opgave5\ListVM\ListVM\listmachine.c" />
+      <ClCompile Include="Opgave5\ListVM\ListVM\utils_unix.c" />
+      <ClCompile Include="Opgave5\ListVM\ListVM\utils_win.c" />
+    </ItemGroup>
+
+</Project>
