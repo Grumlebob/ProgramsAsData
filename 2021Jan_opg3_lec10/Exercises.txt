@@ -1,0 +1,8 @@
+Essencen 2021:
+
+1. Micro-C: - Ternerary L-value - (x<y?x:y)=3; Variablen x bliver nu 3.  - lecture 6
+2: Micro-C: -  Alias - alias j as i; //Make local variable j an alias of local variable i   - lecture 6
+3: List-C:  - Tilføj Arrays på heap  - lecture 10
+
+
+

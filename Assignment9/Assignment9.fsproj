@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="Exercises.txt" />
         <Compile Include="Library.fs"/>
         <Content Include="ex30.lc" />
         <Content Include="ex30.out" />
@@ -59,7 +60,6 @@
         <Compile Include="CPar.fsi" />
         <Content Include="CPar.fsy" />
         <Content Include="ex11.out" />
-        <Content Include="Exercises.txt" />
     </ItemGroup>
 
 </Project>

@@ -22,6 +22,7 @@ IFZERO L3; GOTO L2; Label L3; ....
 where the conditional jump jumps over an unconditional jump. Instead it should
 generate code such as this:
 IFNZRO L2; Label L3; ....
+
 Define a new auxiliary function addIFZERO lab3 C which tests whether C has
 the structure shown above. In the code generation for If(e,s1,s2) in cStmt,
 instead of doing IFZERO labelse:: code you must call the auxiliary to do

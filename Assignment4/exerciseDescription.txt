@@ -45,7 +45,6 @@ useful.
 
 Done.
 
-
   
 Exercise 4.4 In continuation of Exercise 4.3, modify the 
 parser specification to
@@ -71,7 +70,6 @@ val it: Absyn.expr =
        ("max3", ["a"; "b"; "c"],
         Call (Var "max2", [Var "a"; Call (Var "max2", [Var "b"; Var "c"])]),
         Call (Var "max3", [CstI 25; CstI 6; CstI 62])))
-
 
 
 Exercise 4.5 Extend the (untyped) functional language with infix operator “&&”

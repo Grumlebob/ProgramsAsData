@@ -78,7 +78,6 @@ Done:
 > run (fromString "fun x -> x + 2");;
 val it: HigherFun.value = Clos ("x", Prim ("+", Var "x", CstI 2), [])
 
-
  
 Exercise 6.3 Extend the micro-ML lexer and parser specifications in FunLex.fsl
 and FunPar.fsy to permit anonymous functions. The concrete syntax may be as
@@ -135,16 +134,13 @@ following types:
 > inferType (fromString "let f x = if x then true else false in f end");;
 val it: string = "(bool -> bool)"
 
-
 • int -> int
 > inferType (fromString "let f x = if true then 3 else x in f end");;
 val it: string = "(int -> int)"
 
-
 • int -> int -> int
 > inferType (fromString "let f x = let g y = let h z = 1 in x + y end in g end in f end ");;
 val it: string = "(int -> (int -> int))"
-
 
 • ’a -> ’b -> ’a
 > inferType (fromString "let f x = let g y = let h z = 1 in x end in g end in f end ");;

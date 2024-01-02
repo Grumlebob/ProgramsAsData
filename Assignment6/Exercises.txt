@@ -80,7 +80,7 @@ See Exercise72One.c + Exercise72Two.c + Exercise72Three.c  for the solution
 
 Exercise 7.3 Extend MicroC with a for-loop, permitting for instance
 for (i=0; i<100; i=i+1)
-sum = sum+i;
+    sum = sum+i;
 To do this, you must modify the lexer and parser specifications in 
 CLex.fsl and
 CPar.fsy. 

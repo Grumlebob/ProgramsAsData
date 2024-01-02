@@ -1,0 +1,9 @@
+Essencen 2018 jan:
+
+1. NFA to DFA - lecture x
+2: Icon - lecture 11
+3: Micro-ML - lecture 5
+4: Micro-C - lecture 6
+
+
+

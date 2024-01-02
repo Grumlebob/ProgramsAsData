@@ -1,0 +1,9 @@
+Essencen 2019 dec:
+
+1. NFA to DFA - lecture x
+2: Micro-ML: - inCheck / withIn - lecture 5
+3: Micro-C: - print varEnc - lecture 6
+4: Micro-C: - print current Stack Frame - lecture 6
+
+
+
