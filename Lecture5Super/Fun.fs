@@ -58,7 +58,7 @@ let rec eval (e : expr) (env : value env) : int =
     | Call(Var f, eArg) -> 
       let fClosure = lookup env f
       match fClosure with
-      | Closure (f, x, fBody, fDeclEnv) ->
+      | Closure (f, x, fBody, fDeclEnv) -> //Static scope
         let xVal = Int(eval eArg env)
         let fBodyEnv = (x, xVal) :: (f, fClosure) :: fDeclEnv
         eval fBody fBodyEnv

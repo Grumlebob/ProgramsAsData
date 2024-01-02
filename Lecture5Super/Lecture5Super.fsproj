@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="README.TXT" />
         <Compile Include="Program.fs"/>
         <Compile Include="Absyn.fs" />
         <Compile Include="Fun.fs" />
@@ -20,7 +21,6 @@
         <Compile Include="ParseAndRun.fs" />
         <Compile Include="ParseAndRunHigher.fs" />
         <Compile Include="ParseAndType.fs" />
-        <Content Include="README.TXT" />
         <Compile Include="TypeInference.fs" />
         <None Include="chap5.fsx" />
         <None Include="chap6.fsx" />

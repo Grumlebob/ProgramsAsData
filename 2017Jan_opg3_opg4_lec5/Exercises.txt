@@ -2,7 +2,6 @@ Essencen 2017 jan:
 
 1. NFA to DFA - lecture x
 2: Icon - lecture 11
-3: Micro-ML - lecture 5
-4: Micro-ML - lecture 5
-5: List-C - lecture 10
-
+3: Micro-ML - Print - lecture 5
+4: Micro-ML - Pipes / function composition - lecture 5
+5: List-C - Tuples - lecture 10

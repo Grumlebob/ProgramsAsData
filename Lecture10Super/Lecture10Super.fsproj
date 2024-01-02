@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="README.TXT" />
         <Compile Include="Program.fs"/>
         <ClCompile Include="ListVM\ListVM\utils_win.c" />
         <ClCompile Include="ListVM\ListVM\utils_unix.c" />
@@ -30,7 +31,6 @@
         <Compile Include="Machine.fs" />
         <Compile Include="Parse.fs" />
         <Compile Include="ParseAndComp.fs" />
-        <Content Include="README.TXT" />
         <Content Include="StringConcatSpeed.class" />
         <Content Include="StringConcatSpeed.java" />
         <Content Include="Timer.class" />

@@ -1,9 +1,9 @@
 Essencen 2019 Jan:
 
 1. Icon - lecture 11
-2. Micro-ML - -Lecture 5
-3. Micro-ML - -Lecture 5
-4. Micro-C - Lecture 6
+2. Micro-ML - Records -Lecture 5
+3. Micro-ML - Records -Lecture 5
+4. Micro-C - Breakpoints Lecture 6
 
 
 
