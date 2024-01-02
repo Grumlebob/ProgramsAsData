@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Program.fs"/>
+        <Compile Include="Factorial.cs" />
+        <Content Include="Factorial2.java" />
+        <None Include="fac.fsx" />
+        <None Include="prod.fsx" />
+        <Content Include="Cont.class" />
+        <Content Include="Cont.fsproj" />
+        <Compile Include="Contfun.fs" />
+        <Compile Include="Contimp.fs" />
+        <Content Include="Factorial$1.class" />
+        <Content Include="Factorial$2.class" />
+        <Content Include="Factorial.class" />
+        <Content Include="Factorial.java" />
+        <Compile Include="Icon.fs" />
+        <Content Include="README.TXT" />
+        <Content Include="testlongjmp" />
+        <ClCompile Include="testlongjmp.c" />
+    </ItemGroup>
+
+</Project>

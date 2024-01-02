@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>_2017Jan_opg2_lec11</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="Exercises.txt" />
+        <Compile Include="Program.fs"/>
+        <ClCompile Include="ListVM\ListVM\utils_win.c" />
+        <ClCompile Include="ListVM\ListVM\utils_unix.c" />
+        <Content Include="ListVM\ListVM\ListVM.vcxproj.user" />
+        <Content Include="ListVM\ListVM\ListVM.vcxproj.filters" />
+        <Content Include="ListVM\ListVM\ListVM.vcxproj" />
+        <ClCompile Include="ListVM\ListVM\listmachine.c" />
+        <Content Include="ListVM\ListVM\listmachine" />
+        <Content Include="ListVM\.vs\ListVM\v14\.suo" />
+        <Content Include="ListVM\ListVM.VC.db" />
+        <Content Include="ListVM\ListVM.sln" />
+        <Compile Include="Absyn.fs" />
+        <Compile Include="CLex.fs" />
+        <Content Include="CLex.fsl" />
+        <Compile Include="CPar.fs" />
+        <Compile Include="CPar.fsi" />
+        <Content Include="CPar.fsy" />
+        <Content Include="CircularQueue.class" />
+        <Content Include="CircularQueue.java" />
+        <Compile Include="Comp.fs" />
+        <Compile Include="ListCC.fs" />
+        <Compile Include="Machine.fs" />
+        <Compile Include="Parse.fs" />
+        <Compile Include="ParseAndComp.fs" />
+        <Content Include="README.TXT" />
+        <Content Include="StringConcatSpeed.class" />
+        <Content Include="StringConcatSpeed.java" />
+        <Content Include="Timer.class" />
+        <Content Include="ex11.out" />
+        <Content Include="ex30.lc" />
+        <Content Include="ex30.out" />
+        <Content Include="ex31.lc" />
+        <Content Include="ex31.out" />
+        <Content Include="ex32.lc" />
+        <Content Include="ex32.out" />
+        <Content Include="ex33.lc" />
+        <Content Include="ex33.out" />
+        <Content Include="ex34.lc" />
+        <Content Include="ex34.out" />
+        <Content Include="ex35.lc" />
+        <Content Include="ex35.out" />
+        <Content Include="ex36.lc" />
+        <Content Include="ex36.out" />
+        <Content Include="ex37.lc" />
+        <Content Include="ex37.out" />
+        <Content Include="exGC01.lc" />
+        <Content Include="exGC01.out" />
+        <Content Include="listcc.exe" />
+        <Content Include="listmachine" />
+        <Content Include="prog0" />
+        <Content Include="prog1" />
+        <Compile Include="resurrection.cs" />
+        <Content Include="resurrection.exe" />
+    </ItemGroup>
+
+</Project>
