@@ -18,3 +18,7 @@ type expr =
   | Print of expr                                       (* 2017Jan - print (expr) *)
   | Set of expr list                                    (* 2022Jan *)
   | InCheck of expr * expr * expr                       (* 2022Jan *)
+  | Field of expr * string                    (* Jan2019 (e record, s fieldvariable) *)
+  | Record of (string * expr) list          (*  Jan2019 (s fieldvariable, e record) list*)
+  | Enum of string * string list * expr             (* 2018Jan - Enum ("Weekend",["Sat"; "Sun"],EnumVal ("Weekend","Sat")) *)
+  | EnumVal of string * string                        (* 2018Jan - se ovenstående, enum n, værdien for n *)

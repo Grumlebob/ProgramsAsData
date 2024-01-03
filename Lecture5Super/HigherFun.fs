@@ -32,6 +32,7 @@ type value =
     | Closure of string * string * expr * value env (* (f, x, fBody, fDeclEnv) *)
     | Clos of string * expr * value env (* ASSIGNMENT 5 (x,body,declEnv) *)
     | SetV of Set<value> (* 2022 JAN *)
+    | EVal of string * string list (* 2018 JAN *)
 
 let rec eval (e: expr) (env: value env) : value =
     match e with
@@ -87,6 +88,17 @@ let rec eval (e: expr) (env: value env) : value =
       let v2 = eval e2 env
       if v1 > v2 then failwith "InCheck: v1 > v2"
       elif v >= v1 && v <= v2 then Int 1 else Int 0
+    | Enum(s, l, e) -> // 2018 Jan 
+      let letEnv = (s,EVal(s,l)) :: env 
+      eval e letEnv
+    | EnumVal(s1,s2) -> // 2018 Jan 
+      let v = lookup env s1
+      match v with
+      | EVal(_,l) -> 
+        match List.tryFindIndex (fun a -> a = s2 ) l with
+        | Some s  -> Int s
+        | None    -> failwith "value not part of enum"
+      | _         -> failwith "its not a enum"
 
 (* Evaluate in empty environment: program must have no free variables: *)
 

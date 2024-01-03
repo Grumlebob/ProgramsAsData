@@ -5,4 +5,20 @@ Essencen 2019 Jan:
 3. Micro-ML - Records -Lecture 5
 4. Micro-C - Breakpoints Lecture 6
 
+To run opg 2:
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
 
+open Parse;;
+let ex1 = fromString "let x = { } in x end";;
+let ex2 = fromString "let x = {field1 = 32} in x.field1 end";;
+let ex3 = fromString "let x = {field1 = 32; field2 = 33} in x end";;
+let ex4 = fromString "let x = {field1 = 32; field2 = 33} in x.field1 end";;
+let ex5 = fromString "let x = {field1 = 32; field2 = 33} in x.field1+x.field2 end";;
+
+To run opg 3:
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
+
+open Absyn;;
+ParseAndRunHigher.run (Let ("x",Record [("field1", CstI 32)], Field (Var "x","field1")));;

@@ -30,6 +30,7 @@ let rec lookup env x =
 type value = 
   | Int of int
   | Closure of string * string * expr * value env       (* (f, x, fBody, fDeclEnv) *)
+  | RecordV of (string * value) list (* Exam - [field, value] ["field1", Int 32] *) 
 
 let rec eval (e : expr) (env : value env) : value =
     match e with
@@ -58,6 +59,19 @@ let rec eval (e : expr) (env : value env) : value =
     | Letfun(f, x, fBody, letBody) -> 
       let bodyEnv = (f, Closure(f, x, fBody, env)) :: env
       eval letBody bodyEnv
+    | Record rLst ->  (* Exam *)
+      // Check for duplicate field names:
+      let rec checkDup lst = 
+        match lst with
+        | [] -> ()
+        | (str, _)::r -> if List.exists (fun (str2, _) -> str = str2) r then failwith "duplicate field name" else checkDup r
+      checkDup rLst
+
+      RecordV (List.map (fun (str, e) -> (str, eval e env)) rLst)
+    | Field(e, str) ->  (* Exam *)
+      match eval e env with
+      | RecordV s -> lookup s str
+      | _           -> failwith "eval Field: not a record"
     | Call(eFun, eArg) -> 
       let fClosure = eval eFun env  (* Different from Fun.fs - to enable first class functions *)
       match fClosure with

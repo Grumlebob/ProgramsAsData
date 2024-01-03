@@ -25,11 +25,13 @@
   | "within" -> WITHIN
   | '['             { LBRACKET }        (* dec2019 *)
   | ']'             { RBRACKET }        (* dec2019 *)
-  
 
 //2019Jan Records:
+Giver shift/reduce, check egen mappe.
 
-
+//2018Jan Enums:
+    | '|'             { BAR }
+    | '.'             { DOT  }            (* Jan2018 *)
 
 --------Added to Yacc:----------    
 //Assignment 4 (Bemærk List support, er fjernet grundet gav shift/reduce conflict med andre regler)
@@ -77,10 +79,22 @@ Expr:
 %left WITHIN                /* 2019 dec  */
   | Expr WITHIN LBRACKET Expr COMMA Expr RBRACKET  { InCheck($1, $4, $6)    } /* 2019 dec  */
 
+//2018Jan Enums:
+EnumList:
+    /* empty */                         { [] }
+  | EnumElement                         { $1 }
+;
 
-//2019Jan Records:
+EnumElement:
+    NAME                                { [$1]     }
+  | NAME PIPE EnumElement                { $1 :: $3 }
+;
 
+Expr: 
+  | NAME DOT NAME                       { EnumVal($1, $3)       }
 
+AtExpr:
+  | ENUM NAME EQ EnumList IN Expr END   { Enum($2, $4, $6)   } 
 
 --------Added to HigherFun:----------
 //Assignment 5
@@ -119,10 +133,24 @@ eval:
       if v1 > v2 then failwith "InCheck: v1 > v2"
       elif v >= v1 && v <= v2 then Int 1 else Int 0
 
-//2019Jan Records:
-
-
-        
+//2018Jan Enums:
+value:
+  | EVal of string * string list (* Exam *)
+       
+Eval:
+    | Enum(s, l, e) ->
+      let letEnv = (s,EVal(s,l)) :: env 
+      eval e letEnv
+    | EnumVal(s1,s2) ->
+      let v = lookup env s1
+      match v with
+      | EVal(_,l) -> 
+        match List.tryFindIndex (fun a -> a = s2 ) l with
+        | Some s  -> Int s
+        | None    -> failwith "value not part of enum"
+      | _         -> failwith "its not a enum"
+      
+      
 ---------Commands to test code----------
     //Assignment 4:
 fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy }
@@ -168,3 +196,12 @@ open ParseAndRunHigher;;
 run (fromString @"let x = 23 in x within [2+3,40] end");;
 
     //2019Jan Records:
+Giver conflicts, check egen mappe. Ingen TA har løst det.
+
+    //2018Jan Enums:    
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
+
+open ParseAndRunHigher;;    
+let test = fromString "enum Weekend = Sat | Sun in let r = 1 + Weekend.Sun in r + 1 end end";;
+run(fromString "enum Weekend = Sat | Sun in Weekend.Sun end");;

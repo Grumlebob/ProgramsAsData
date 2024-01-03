@@ -11,3 +11,5 @@ type expr =
   | If of expr * expr * expr
   | Letfun of string * string * expr * expr    (* (f, x, fBody, letBody) *)
   | Call of expr * expr
+  | Enum of string * string list * expr (* 2018Jan - Enum ("Weekend",["Sat"; "Sun"],EnumVal ("Weekend","Sat")) *)
+  | EnumVal of string * string (* 2018Jan - se ovenstående, enum n, værdien for n *)

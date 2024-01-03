@@ -30,6 +30,7 @@ let rec lookup env x =
 type value = 
   | Int of int
   | Closure of string * string * expr * value env       (* (f, x, fBody, fDeclEnv) *)
+  | EVal of string * string list (* Exam *)
 
 let rec eval (e : expr) (env : value env) : value =
     match e with
@@ -58,6 +59,17 @@ let rec eval (e : expr) (env : value env) : value =
     | Letfun(f, x, fBody, letBody) -> 
       let bodyEnv = (f, Closure(f, x, fBody, env)) :: env
       eval letBody bodyEnv
+    | Enum(s, l, e) ->
+      let letEnv = (s,EVal(s,l)) :: env 
+      eval e letEnv
+    | EnumVal(s1,s2) ->
+      let v = lookup env s1
+      match v with
+      | EVal(_,l) -> 
+        match List.tryFindIndex (fun a -> a = s2 ) l with
+        | Some s  -> Int s
+        | None    -> failwith "value not part of enum"
+      | _         -> failwith "its not a enum"
     | Call(eFun, eArg) -> 
       let fClosure = eval eFun env  (* Different from Fun.fs - to enable first class functions *)
       match fClosure with
