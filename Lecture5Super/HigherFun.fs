@@ -41,7 +41,6 @@ let rec eval (e: expr) (env: value env) : value =
     | Prim(ope, e1, e2) ->
         let v1 = eval e1 env
         let v2 = eval e2 env
-
         match (ope, v1, v2) with
         | ("*", Int i1, Int i2) -> Int(i1 * i2)
         | ("+", Int i1, Int i2) -> Int(i1 + i2)
@@ -68,7 +67,6 @@ let rec eval (e: expr) (env: value env) : value =
     | Call(eFun, eArg) ->
         let fClosure =
             eval eFun env (* Different from Fun.fs - to enable first class functions *)
-
         match fClosure with
         | Closure(f, x, fBody, fDeclEnv) ->
             let xVal = eval eArg env
@@ -83,6 +81,12 @@ let rec eval (e: expr) (env: value env) : value =
       let valueOfe = eval expression env
       printfn "%A" valueOfe
       valueOfe
+    | InCheck(e, e1, e2) -> // 2019 dec: e1 <= e <= e2 
+      let v = eval e env
+      let v1 = eval e1 env
+      let v2 = eval e2 env
+      if v1 > v2 then failwith "InCheck: v1 > v2"
+      elif v >= v1 && v <= v2 then Int 1 else Int 0
 
 (* Evaluate in empty environment: program must have no free variables: *)
 

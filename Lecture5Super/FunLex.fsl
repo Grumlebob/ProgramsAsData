@@ -32,6 +32,7 @@ let keyword s =
     | "true"  -> CSTBOOL true
     | "fun"   -> FUN            (* Assignment 5 *)
     | "print" -> PRINT          (* Jan2017 *)
+    | "within" -> WITHIN        (* dec2019 *)
     | _       -> NAME s
 }
 
@@ -66,6 +67,8 @@ rule Token = parse
   | "++"            { UNION }           (* Jan2022 *)
   | '{'             { LBRACE }          (* Jan2022 *)
   | '}'             { RBRACE }          (* Jan2022 *)
+  | '['             { LBRACKET }        (* dec2019 *)
+  | ']'             { RBRACKET }        (* dec2019 *)
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
 

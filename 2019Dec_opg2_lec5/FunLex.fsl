@@ -30,6 +30,7 @@ let keyword s =
     | "not"   -> NOT
     | "then"  -> THEN
     | "true"  -> CSTBOOL true
+    | "within" -> WITHIN        (* dec2019 *)
     | _       -> NAME s
 }
 
@@ -55,6 +56,9 @@ rule Token = parse
   | '%'             { MOD }
   | '('             { LPAR }
   | ')'             { RPAR }
+  | '['             { LBRACKET }        (* dec2019 *)
+  | ']'             { RBRACKET }        (* dec2019 *)
+  | ','             { COMMA }           (* dec2019 *)
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
 

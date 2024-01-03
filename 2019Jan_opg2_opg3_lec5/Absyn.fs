@@ -11,3 +11,5 @@ type expr =
   | If of expr * expr * expr
   | Letfun of string * string * expr * expr    (* (f, x, fBody, letBody) *)
   | Call of expr * expr
+  | Field of expr * string                    (* Jan2019 (record, fieldvariable) *)
+  | Record of (string * expr) list          (*  Jan2019 (record, fieldvariable) list*)

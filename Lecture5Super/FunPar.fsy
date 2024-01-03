@@ -20,13 +20,14 @@
 %token RARROW FUN        /* Assignment 5  */
 %token PIPERIGHT COMPOSERIGHT /* Jan2017 */
 %token UNION LBRACE RBRACE COMMA        /* 2022 Jan  */
+%token LBRACKET RBRACKET WITHIN           /* 2019 dec  */
 
 %left ELSE                              /* lowest precedence  */
 %left PRINT                             /* Jan2017  */
 %left AND OR                            /* Assignment4  */
 %right RARROW                           /* Assignment 5  */
 %left EQ NE PIPERIGHT COMPOSERIGHT      /* Jan2017 */
-%left GT LT GE LE
+%left GT LT GE LE WITHIN                /* 2019 dec  */
 %left PLUS MINUS UNION                  /* 2022 Jan  */
 %left TIMES DIV MOD                 
 %nonassoc NOT                           /* highest precedence  */
@@ -72,6 +73,7 @@ Expr:
   | Expr COMPOSERIGHT Expr              { Prim(">>", $1, $3)     }  /* Jan2017  */
   | Expr UNION Expr                     { Prim("++", $1, $3)     } /* 2022 Jan  */
   | LBRACE SetExpr RBRACE               { Set($2)                } /* 2022 Jan  */
+  | Expr WITHIN LBRACKET Expr COMMA Expr RBRACKET  { InCheck($1, $4, $6)    } /* 2019 dec  */
 ;
 
 AtExpr:

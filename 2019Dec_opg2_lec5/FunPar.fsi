@@ -24,6 +24,10 @@ type token =
   | NOT
   | THEN
   | TRUE
+  | LBRACKET
+  | RBRACKET
+  | WITHIN
+  | COMMA
   | CSTBOOL of (bool)
   | NAME of (string)
   | CSTINT of (int)
@@ -51,6 +55,10 @@ type tokenId =
     | TOKEN_NOT
     | TOKEN_THEN
     | TOKEN_TRUE
+    | TOKEN_LBRACKET
+    | TOKEN_RBRACKET
+    | TOKEN_WITHIN
+    | TOKEN_COMMA
     | TOKEN_CSTBOOL
     | TOKEN_NAME
     | TOKEN_CSTINT

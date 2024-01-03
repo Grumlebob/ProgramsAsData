@@ -11,7 +11,7 @@
 %token <string> NAME
 %token <bool> CSTBOOL
 
-%token ELSE END FALSE IF IN LET NOT THEN TRUE
+%token ELSE END FALSE IF IN LET NOT THEN TRUE LBRACKET RBRACKET WITHIN COMMA
 %token PLUS MINUS TIMES DIV MOD
 %token EQ NE GT LT GE LE
 %token LPAR RPAR 
@@ -19,7 +19,7 @@
 
 %left ELSE              /* lowest precedence  */
 %left EQ NE 
-%left GT LT GE LE
+%left GT LT GE LE WITHIN
 %left PLUS MINUS
 %left TIMES DIV MOD 
 %nonassoc NOT           /* highest precedence  */
@@ -50,6 +50,7 @@ Expr:
   | Expr LT    Expr                     { Prim("<",  $1, $3)     }
   | Expr GE    Expr                     { Prim(">=", $1, $3)     }
   | Expr LE    Expr                     { Prim("<=", $1, $3)     }
+  | Expr WITHIN LBRACKET Expr COMMA Expr RBRACKET  { InCheck($1, $4, $6)    } /* 2019 dec  */
 ;
 
 AtExpr:

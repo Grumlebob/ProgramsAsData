@@ -16,4 +16,5 @@ type expr =
   | CallList of expr *  expr list                       (* Assignment 4 (var functionname, expr arguments)*)
   | Fun of string * expr                                (* Assignment 5 - fun x -> x+2 (x, body) *)
   | Print of expr                                       (* 2017Jan - print (expr) *)
-  | Set of expr list (* 2022Jan *)  
+  | Set of expr list                                    (* 2022Jan *)
+  | InCheck of expr * expr * expr                       (* 2022Jan *)

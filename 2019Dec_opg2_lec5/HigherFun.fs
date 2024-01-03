@@ -58,6 +58,12 @@ let rec eval (e : expr) (env : value env) : value =
     | Letfun(f, x, fBody, letBody) -> 
       let bodyEnv = (f, Closure(f, x, fBody, env)) :: env
       eval letBody bodyEnv
+    | InCheck(e, e1, e2) -> // 2019 dec: e1 <= e <= e2 
+      let v = eval e env
+      let v1 = eval e1 env
+      let v2 = eval e2 env
+      if v1 > v2 then failwith "InCheck: v1 > v2"
+      elif v >= v1 && v <= v2 then Int 1 else Int 0
     | Call(eFun, eArg) -> 
       let fClosure = eval eFun env  (* Different from Fun.fs - to enable first class functions *)
       match fClosure with
@@ -66,6 +72,7 @@ let rec eval (e : expr) (env : value env) : value =
         let fBodyEnv = (x, xVal) :: (f, fClosure) :: fDeclEnv
         in eval fBody fBodyEnv
       | _ -> failwith "eval Call: not a function";;
+    
 
 (* Evaluate in empty environment: program must have no free variables: *)
 
