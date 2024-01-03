@@ -37,7 +37,7 @@ type typ =
   | TypI                                (* int                         *)
   | TypB                                (* bool                        *)
   | TypF of typ * typ                   (* (argumenttype, resulttype)  *)
-  | TypL of typ
+  | TypL of typ                         //ASSIGNMENT 5
 
 (* New abstract syntax with explicit types, instead of Absyn.expr: *)
 
@@ -51,7 +51,7 @@ type tyexpr =
   | Letfun of string * string * typ * tyexpr * typ * tyexpr
           (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
   | Call of tyexpr * tyexpr
-  | ListExpr of tyexpr list * typ
+  | ListExpr of tyexpr list * typ   //ASSIGNMENT 5 listOfTypes, typeOfList
 
 (* A runtime value is an integer or a function closure *)
 
@@ -140,7 +140,10 @@ let rec typ (e : tyexpr) (env : typ env) : typ =
         else failwith "Call: wrong argument type"
       | _ -> failwith "Call: unknown function"
     | Call(_, eArg) -> failwith "Call: illegal function in call"
-
+    | ListExpr ([],typeOfList) -> failwith "List: empty list"
+    | ListExpr (listOfTypes, typeOfList) ->
+        let areTheyAllSameType = List.fold (fun acc x -> if acc = false then false else if ((typ x env) = typeOfList) then true else false) true listOfTypes 
+        if areTheyAllSameType = true then TypL typeOfList else failwith "Different types in the list"
 let typeCheck e = typ e [];;
 
 

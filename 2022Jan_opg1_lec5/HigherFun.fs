@@ -30,6 +30,7 @@ let rec lookup env x =
 type value = 
   | Int of int
   | Closure of string * string * expr * value env       (* (f, x, fBody, fDeclEnv) *)
+  | SetV of Set<value> (* 2022 JAN *)
 
 let rec eval (e : expr) (env : value env) : value =
     match e with
@@ -45,7 +46,10 @@ let rec eval (e : expr) (env : value env) : value =
       | ("-", Int i1, Int i2) -> Int (i1 - i2)
       | ("=", Int i1, Int i2) -> Int (if i1 = i2 then 1 else 0)
       | ("<", Int i1, Int i2) -> Int (if i1 < i2 then 1 else 0)
+      | ("++", SetV s1, SetV s2) -> SetV (Set.union s1 s2)  (* 2022 JAN - union two sets *)
+      | ("=", SetV s1, SetV s2) -> Int (if s1 = s2 then 1 else 0) (* 2022 JAN - are sets equal? *)
       |  _ -> failwith "unknown primitive or wrong type"
+    | Set setLst -> SetV (Set.ofList (List.map (fun elementInList -> eval elementInList env) setLst)) (* 2022 JAN - evaluate set *) 
     | Let(x, eRhs, letBody) -> 
       let xVal = eval eRhs env
       let letEnv = (x, xVal) :: env 

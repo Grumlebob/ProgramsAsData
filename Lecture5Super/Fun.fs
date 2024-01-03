@@ -25,6 +25,7 @@ let rec lookup env x =
 type value = 
   | Int of int
   | Closure of string * string * expr * value env       (* (f, x, fBody, fDeclEnv) *)
+  | ClosureList of string * string list * expr * value env (* Assignment 4 (f, x list, fBody, fDeclEnv) *)
 
 let rec eval (e : expr) (env : value env) : int =
     match e with 
@@ -63,6 +64,17 @@ let rec eval (e : expr) (env : value env) : int =
         let fBodyEnv = (x, xVal) :: (f, fClosure) :: fDeclEnv
         eval fBody fBodyEnv
       | _ -> failwith "eval Call: not a function"
+    | LetfunList(f, x, fBody, letBody) -> //Assignment 4
+        let bodyEnv = (f, ClosureList(f, x, fBody, env)) :: env
+        eval letBody bodyEnv
+    | CallList(Var f, eArg) -> //Assignment 4
+        let fClosure = lookup env f
+        match fClosure with
+        | ClosureList(f, x, fBody, fDeclEnv) ->
+            let keyVal = List.map (fun name -> Int(eval name env)) eArg |> List.zip x
+            List.fold (fun bodyenv x -> x::bodyenv) ((f, fClosure) :: fDeclEnv) keyVal
+            |> eval fBody
+        | _ -> failwith "eval Call: not a function"
     | Call _ -> failwith "eval Call: not first-order function"
 
 (* Evaluate in empty environment: program must have no free variables: *)

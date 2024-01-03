@@ -57,7 +57,6 @@ let rec eval (e: expr) (env: value env) : int =
         eval letBody bodyEnv
     | Call(Var f, eArg) ->
         let fClosure = lookup env f
-
         match fClosure with
         | Closure(f, x, fBody, fDeclEnv) ->
             let keyVal = List.map (fun name -> Int(eval name env)) eArg |> List.zip x

@@ -11,4 +11,4 @@ type expr =
   | If of expr * expr * expr
   | Letfun of string * string * expr * expr    (* (f, x, fBody, letBody) *)
   | Call of expr * expr
-  | Fun of string * expr                      (* 6.2 (x, body) *)  
+  | Fun of string * expr                      (* ASSIGNMENT 5 (x, body) *)  

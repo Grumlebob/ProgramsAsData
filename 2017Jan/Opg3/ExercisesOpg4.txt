@@ -26,8 +26,6 @@ val it: Absyn.expr =
 
 
 
-
-
 2. Anvend parseren på nedenstående 3 eksempler og forklar den genererede abstrakte syntaks udfra reglerne
 om præcedens og associativitet af |> og >>. Forklar yderligere, for hvert eksempel, hvorvidt du mener, at
 den genererede syntaks bør repræsentere et validt micro-ML program.

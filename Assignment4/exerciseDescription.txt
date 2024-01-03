@@ -35,8 +35,7 @@ Modify the language to allow functions to take one or more arguments. Start by
 modifying the abstract syntax in 
 Absyn.fs to permit a list of parameter names in Letfun 
 and a list of argument expressions in Call.
-Then modify the eval interpreter in file 
-Fun.fs to work for the new abstract syntax. 
+Then modify the eval interpreter in file Fun.fs to work for the new abstract syntax. 
 You must modify the closure representation to accommodate a list of parameters.
 Also, modify the Letfun and Call clauses of the interpreter. You will
 need a way to zip together a list of variable names and a list of variable values, to get

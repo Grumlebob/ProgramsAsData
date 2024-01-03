@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="README.TXT" />
         <Compile Include="Program.fs"/>
         <Compile Include="Absyn.fs" />
         <Compile Include="CLex.fs" />
@@ -27,7 +28,6 @@
         <Compile Include="ParseAndComp.fs" />
         <Compile Include="ParseAndContcomp.fs" />
         <Compile Include="ParseAndRun.fs" />
-        <Content Include="README.TXT" />
         <Content Include="a.out" />
         <Content Include="bar" />
         <ClCompile Include="ex1.c" />
