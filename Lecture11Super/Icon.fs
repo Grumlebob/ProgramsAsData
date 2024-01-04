@@ -34,7 +34,10 @@ type expr =
   | And of expr * expr
   | Or  of expr * expr
   | Seq of expr * expr
-  | Every of expr 
+  | Every of expr
+  | Bang of string //2018 exam
+  | BangN of string * int //2018 exam
+  | Find of string * string //2019 exam
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -99,6 +102,46 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
       eval e (fun _ -> fun econt1 -> econt1 ())
              (fun () -> cont (Int 0) econt)
     | Fail -> econt ()
+    | Find (patternToMatch, inputString )->
+        (*let str = "Hi there - if there are anyone"
+        > val str : string = "Hi there - if there are anyone"
+        run (Every(Write(Find("there",str))))
+        > 3 14 val it : value = Int 0*)
+        let rec loop (currentIndex:int) =
+            let foundIndex = inputString.IndexOf(patternToMatch,currentIndex)
+            if foundIndex = -1 then
+                econt ()
+            else
+                cont (Int foundIndex)  (fun () -> loop (foundIndex+1))
+        loop 0
+    | Bang(str) -> //2018 exam
+        //explode string to add space between each char
+        let rec loop (inputString:string) =
+            if inputString.Length = 0 then
+                econt ()
+            else
+                let c = inputString.[0]
+                let rest = inputString.Substring(1)
+                cont (Str (string c))  (fun () -> loop (rest))
+        loop str     
+    | BangN(str:string,times:int) -> //2018 exam
+        //do Bang n times
+        let rec outerLoop (inputString:string) (times:int) =
+            
+            if times = 0 then
+                econt ()
+            else
+                let rec loop (inputString:string) =
+                    if inputString.Length = 0 then
+                        outerLoop str (times-1)
+                    else
+                        let c = inputString.[0]
+                        let rest = inputString.Substring(1)
+                        cont (Str (string c))  (fun () -> loop (rest))
+                loop str
+        outerLoop str times
+
+        
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
 
@@ -136,4 +179,36 @@ let ex7 = Every(Write(Prim("+", FromTo(1,3), FromTo(4, 6))));
 let ex8 = Write(Prim("<", CstI 4, FromTo(1, 10)));
 
 // every(write(4 < (1 to 10)))
-let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))));
+let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))))
+
+
+//Exam 2018Jan
+//opg 1
+let iconEx1_2018 = Every(Write(Or(FromTo(1, 2), FromTo(3,4))))
+// rewrite så værdierne 3 4 3 4 udskrives
+let iconEx1Rewritten_2018 = Every(Write(And(FromTo(1, 2), FromTo(3,4))))
+
+//opg 2 - Write "I C O N"
+let iconEx2_2018 = And(Seq(Write(CstS "I"), Seq(Write(CstS "C"), Seq(Write(CstS "O"), Write(CstS "N")))),CstI 0)
+//I C O N val it: value = Int 0
+
+//opg 3 - implement Bang(string)
+(*
+dotnet fsi Icon.fs
+open Icon;;
+*)
+let iconEx3_2018 = Every(Write(Bang "Icon"));;
+//run iconEx3;;
+//opg 4 - implement BangN(string, int)
+let iconEx4_2018 = Every(Write(BangN("Icon", 2)));;
+//run iconEx4;;
+
+//Exam 2019 opg 1:
+let iconEx1_2019 = Write(Prim("<",CstI 7,FromTo(1,10)))
+//Rewritten to write 8 9 10
+let iconEx1Rewritten_2019 = Every(Write(Prim("<",CstI 7,FromTo(1,10))))
+
+//Exam 2019 opg 2:
+let iconEx2_2019 = Every(Write(And(FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
+//rewritten to write 1,2,3,4 .....4 8 12 16
+let iconEx2Rewritten_2019 = Every(Write(Prim("*", FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))

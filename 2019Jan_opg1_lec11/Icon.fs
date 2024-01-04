@@ -113,10 +113,7 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
                 econt ()
             else
                 cont (Int foundIndex)  (fun () -> loop (foundIndex+1))
-        
-        loop 0    
-            
-
+        loop 0
     | Fail -> econt ()
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -166,4 +163,3 @@ let iconEx1Rewritten = Every(Write(Prim("<",CstI 7,FromTo(1,10))))
 let iconEx2 = Every(Write(And(FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
 //rewritten to write 1,2,3,4 .....4 8 12 16
 let iconEx2Rewritten = Every(Write(Prim("*", FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
-
