@@ -6,21 +6,25 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="NotesForChanges.txt" />
         <Content Include="README.TXT" />
-        <Compile Include="Program.fs"/>
+        <ClCompile Include="2021Opg2_ex1.c" />
+        <ClCompile Include="2021Opg2_ex2.c" />
+        <Content Include="2021Opg2_2_stackAfterAlias.txt" />
+        <Compile Include="Program.fs" />
+        <Compile Include="Machine.fs" />
         <Compile Include="Absyn.fs" />
+        <Compile Include="Comp.fs" />
         <Compile Include="CLex.fs" />
         <Content Include="CLex.fsl" />
         <Content Include="CPar.exe" />
         <Compile Include="CPar.fs" />
         <Compile Include="CPar.fsi" />
         <Content Include="CPar.fsy" />
-        <Compile Include="Comp.fs" />
         <Compile Include="Contcomp.fs" />
         <Content Include="FSharp.Core.dll" />
         <Compile Include="Interp.fs" />
         <Content Include="Machine.class" />
-        <Compile Include="Machine.fs" />
         <Content Include="Machine.java" />
         <Content Include="Machinetrace.class" />
         <Compile Include="MicroCC.fs" />

@@ -195,6 +195,11 @@ word *freelist;
 #define CDR 29
 #define SETCAR 30
 #define SETCDR 31
+#define CREATETABLE 32
+#define UPDATETABLE 33
+#define INDEXTABLE 34
+#define PRINTTABLE 35
+
 
 #define STACKSIZE 1000
 
@@ -237,6 +242,10 @@ void printInstruction(word p[], word pc) {
   case CDR:    printf("CDR"); break;
   case SETCAR: printf("SETCAR"); break;
   case SETCDR: printf("SETCDR"); break;
+  case CREATETABLE: printf("CREATETABLE"); break;
+  case UPDATETABLE: printf("UPDATETABLE"); break;
+  case INDEXTABLE: printf("INDEXTABLE"); break;
+  case PRINTTABLE: printf("PRINTTABLE"); break;
   default:     printf("<unknown>"); break;
   }
 }
@@ -379,6 +388,57 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       word* p = (word*)s[sp];
       p[2] = v;
     } break;
+    case CREATETABLE: {
+      int lengthOfArrayContent = Untag(s[sp]);
+
+        if (lengthOfArrayContent < 0)
+        {
+            printf("Cannot create array with negative length\n");
+            return -1;  
+        }
+        
+      int lengthOfBlock = lengthOfArrayContent + 2;  
+      word* p = allocate(CONSTAG, lengthOfBlock, s, sp);
+      p[1] = (word)Tag(lengthOfArrayContent);
+      for (int i =2; i < lengthOfBlock; i++)
+      {
+        p[i] = (word)Tag(0);
+      }
+      s[sp] = (word)p;
+    } break;
+    case UPDATETABLE: {
+      word newValue = (word)s[sp];
+      sp--;  
+      word index = (word)Untag(s[sp]);
+      sp--;  
+      word* p = (word*)s[sp];
+      if (index < 0 || index >= Untag(p[1]))
+      {
+        printf("Index out of bounds\n");
+        return -1;
+      }  
+      p[index+2] = newValue;
+    } break;
+    case INDEXTABLE:{
+        word index = (word)Untag(s[sp]);
+        sp--;
+        word* p = (word*)s[sp];
+        if (index < 0 || index >= Untag(p[1]))
+        {
+          printf("Index out of bounds\n");
+          return -1;
+        }  
+        s[sp] = p[index+2];
+    }break;
+    case PRINTTABLE:{
+        word* p = (word*)s[sp];
+        int length = Untag(p[1]);
+        for (int i = 2; i < length+2; i++)
+        {
+          printf("[%d]",Untag(p[i]));
+        }
+        
+    }break;    
     default:
       printf("Illegal instruction " WORD_FMT " at address " WORD_FMT "\n",
 	     p[pc - 1], pc - 1);

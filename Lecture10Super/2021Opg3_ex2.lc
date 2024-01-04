@@ -1,0 +1,11 @@
+void main() {
+    dynamic t;
+    t = createTable(3);
+    updateTable(t,1+1,43+43); //Skal opdatere index 2
+    print indexTable(t,2); //Skal printe 86
+    printTable(t);         //Skal printe 0,0,86
+    dynamic t2;
+    t2 = createTable(1);  // -1 is illegal
+    //updateTable(t,49,42);  // 49 is out of range
+    print indexTable(t2,-1); //-1 is illegal
+}

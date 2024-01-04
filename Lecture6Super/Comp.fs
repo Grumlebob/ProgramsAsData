@@ -149,6 +149,14 @@ and cStmtOrDec stmtOrDec (varEnv : varEnv) (funEnv : funEnv) : varEnv * instr li
     match stmtOrDec with 
     | Stmt stmt    -> (varEnv, cStmt stmt varEnv funEnv) 
     | Dec (typ, x) -> allocate Locvar (typ, x) varEnv
+    | Alias(x, y) ->
+        let (env, fdepth) = varEnv
+        let (lookupY, typeY) = lookup env y
+        let newEnv = ((x, (lookupY, typeY)) :: env, fdepth)
+        (newEnv, [])
+
+(* ------------------------------------------------------------------- *)
+        
 
 (* Compiling micro-C expressions: 
 

@@ -21,6 +21,7 @@ let nl = CstI 10
 %token NOT SEQOR SEQAND
 %token LPAR RPAR LBRACE RBRACE LBRACK RBRACK SEMI COMMA ASSIGN AMP
 %token EOF
+%token CREATETABLE UPDATETABLE INDEXTABLE PRINTTABLE
 
 %right ASSIGN             /* lowest precedence */
 %nonassoc PRINT
@@ -132,6 +133,10 @@ ExprNotAccess:
   | Expr LT    Expr                     { Prim2("<",  $1, $3)   }
   | Expr GE    Expr                     { Prim2(">=", $1, $3)   }
   | Expr LE    Expr                     { Prim2("<=", $1, $3)   }
+  | CREATETABLE LPAR Expr RPAR                          { Prim1("CREATETABLE", $3) }          /* 2021JAN*/
+  | UPDATETABLE LPAR Expr COMMA Expr COMMA Expr RPAR    { Prim3("UPDATETABLE", $3, $5, $7) }  /* 2021JAN*/
+  | INDEXTABLE LPAR Expr COMMA Expr RPAR                { Prim2("INDEXTABLE", $3, $5) }       /* 2021JAN*/
+  | PRINTTABLE LPAR Expr RPAR                           { Prim1("PRINTTABLE", $3) }           /* 2021JAN*/
   | Expr SEQAND Expr                    { Andalso($1, $3)       }
   | Expr SEQOR  Expr                    { Orelse($1, $3)        }
 ;

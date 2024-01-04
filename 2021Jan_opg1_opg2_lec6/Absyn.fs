@@ -28,6 +28,7 @@ and access =
   | AccVar of string                 (* Variable access        x    *) 
   | AccDeref of expr                 (* Pointer dereferencing  *p   *)
   | AccIndex of access * expr        (* Array indexing         a[e] *)
+  | CondExpAccess of expr * access * access (* Jan 2021 (e1 ? ae2 : ae3), e1 = bool and ae2/3 has L-value *)
                                                                    
 and stmt =                                                         
   | If of expr * stmt * stmt         (* Conditional                 *)

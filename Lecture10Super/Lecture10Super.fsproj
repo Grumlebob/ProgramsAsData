@@ -6,7 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="NotesForChanges.txt" />
         <Content Include="README.TXT" />
+        <Content Include="2021Opg3.lc" />
+        <Content Include="2021Opg3_ex2.lc" />
+        <Content Include="2021Opg3.out" />
         <Compile Include="Program.fs"/>
         <ClCompile Include="ListVM\ListVM\utils_win.c" />
         <ClCompile Include="ListVM\ListVM\utils_unix.c" />
@@ -19,6 +23,8 @@
         <Content Include="ListVM\ListVM.VC.db" />
         <Content Include="ListVM\ListVM.sln" />
         <Compile Include="Absyn.fs" />
+        <Compile Include="Machine.fs" />
+        <Compile Include="Comp.fs" />
         <Compile Include="CLex.fs" />
         <Content Include="CLex.fsl" />
         <Compile Include="CPar.fs" />
@@ -26,9 +32,7 @@
         <Content Include="CPar.fsy" />
         <Content Include="CircularQueue.class" />
         <Content Include="CircularQueue.java" />
-        <Compile Include="Comp.fs" />
         <Compile Include="ListCC.fs" />
-        <Compile Include="Machine.fs" />
         <Compile Include="Parse.fs" />
         <Compile Include="ParseAndComp.fs" />
         <Content Include="StringConcatSpeed.class" />

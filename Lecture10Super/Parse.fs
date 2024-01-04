@@ -21,11 +21,14 @@ let fromString (str : string) : program =
              
 (* Parsing from a file *)
 
+//I want to print before returning
 let fromFile (filename : string) =
     use reader = new StreamReader(filename)
     let lexbuf = (*Lexing.*)LexBuffer<char>.FromTextReader reader
     try 
-      CPar.Main CLex.Token lexbuf
+      let result =  CPar.Main CLex.Token lexbuf
+      printfn "%A" result
+      result
     with 
       | exn -> let pos = lexbuf.EndPos 
                failwithf "%s in file %s near line %d, column %d\n" 

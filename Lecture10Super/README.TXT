@@ -20,21 +20,15 @@ Building the list-C command line compiler listcc:
 
     Jacob Desktop:
     fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+    fsc --standalone -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ListCC.fs -o listcc.exe
+    (This compiles our changes/ListCC)
+    
+Using the list-C command line compiler to compile program ex30.lcto listmachine code (in file ex30.out):
+AKA: How to generate .OUT file:
+   .\listcc.exe .\2021Opg3.lc
 
-
-Using the list-C command line compiler to compile program ex30.lc
-to listmachine code (in file ex30.out):
-
-   ListCC ex30.lc
-     or
-   mono listcc.exe ex30.lc
-
-
-On Unix you compile with gcc -o listmachine listmachine.c and use the
-executable.
 
 Run examples (assuming listmachine is a symbolic link to ListVM/ListVM/listmachine.exe)
-
    ./listmachine ex30.out 8
 
  

@@ -22,7 +22,7 @@ and expr =
   | CstN                             (* Constant nil                *)
   | Prim1 of string * expr           (* Unary primitive operator    *)
   | Prim2 of string * expr * expr    (* Binary primitive operator   *)
-  | PrimN of string * expr list       (* N-ary primitive operator    *)
+  | PrimN of string * expr list      (* N-ary primitive operator    *)
   | Andalso of expr * expr           (* Sequential and              *)
   | Orelse of expr * expr            (* Sequential or               *)
   | Call of string * expr list       (* Function call f(...)        *)

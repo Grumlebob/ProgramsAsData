@@ -6,3 +6,37 @@ Essencen 2021:
 
 
 
+1.4 Oversættelsesskema / Compilation scheme
+
+A[[ e1 ? ae1 : ae2 ]] =
+    E[[ e1 ]]
+    IFZERO lab1
+    //Hvis true så forsættes her
+    A[[ ae1 ]]
+    GOTO lab2
+lab1: //Hvis false
+    A[[ ae2 ]]
+lab2:  //Efter hele if statement
+    
+if:
+S[if (e) stmt1 else stmt2] =
+    E[[ e ]]
+    IFZERO lab1
+    S[[ stmt1 ]]
+    GOTO lab2
+lab1:
+    S[[ stmt2 ]]
+lab2:
+
+
+
+backup:
+void main() {
+  int (*x); (*x) = 1;
+  int (*y); (*y) = 2;
+  ((*x) < (*y) ? (*x) : (*y)) = 3;
+  ((*x) < (*y) ? (*x) : (*y)) = 4;
+  print (*x); println; // Expected 3
+  print (*y); println; // Expected 4
+}
+

@@ -1,0 +1,39 @@
+--------Added to Lex:----------
+//2021Jan Arrays:
+    | "createTable" -> CREATETABLE   (* Jan2021 *)
+    | "updateTable" -> UPDATETABLE   (* Jan2021 *)
+    | "indexTable"  -> INDEXTABLE    (* Jan2021 *)
+    | "printTable"  -> PRINTTABLE    (* Jan2021 *) 
+    
+--------Added to Yacc:----------    
+//2021Jan Arrays:
+  | CREATETABLE LPAR Expr RPAR                          { Prim1("CREATETABLE", $3) }          /* 2021JAN*/
+  | UPDATETABLE LPAR Expr COMMA Expr COMMA Expr RPAR    { Prim3("UPDATETABLE", $3, $5, $7) }  /* 2021JAN*/
+  | INDEXTABLE LPAR Expr COMMA Expr RPAR                { Prim2("INDEXTABLE", $3, $5) }       /* 2021JAN*/
+  | PRINTTABLE LPAR Expr RPAR                           { Prim1("PRINTTABLE", $3) }           /* 2021JAN*/
+
+--------Added to comp.fs:----------
+//2021Jan Arrays:
+    | Prim1("CREATETABLE", e) -> 
+    | Prim3("UPDATETABLE", e1, e2, e3) -> 
+    ...
+    
+--------Added to machine.fs:----------
+Her tilføjes nye bytecodeinstructions
+
+--------Added to listmachine.c----------
+Her tilføjes selve eksekveringen af de nye bytecodeinstructions
+
+---------Commands to test code----------
+    //2021jan Arrays:
+1:
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+fsc --standalone -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ListCC.fs -o listcc.exe
+.\listcc.exe 2021Opg3.lc
+
+2:
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+fsc --standalone -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ListCC.fs -o listcc.exe
+.\listcc.exe .\2021Opg3.lc
+cd into ListVM/ListVM:
+./listmachine ../../2021Opg3.out 

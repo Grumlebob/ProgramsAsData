@@ -39,6 +39,7 @@ and stmt =
 and stmtordec =                                                    
   | Dec of typ * string              (* Local variable declaration  *)
   | Stmt of stmt                     (* A statement                 *)
+  | Alias of string * string         (* Exam 2021 "i" is alias of "j" *)
 
 and topdec = 
   | Fundec of typ option * string * (typ * string) list * stmt

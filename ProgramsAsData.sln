@@ -73,6 +73,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Lecture11Super", "Lecture11
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "2022Jan_opg1_lec5", "2022Jan_opg1_lec5\2022Jan_opg1_lec5.fsproj", "{1AECA00D-303F-4EAD-8789-CC33CD240FBC}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "2021Jan_opg4_lec5", "2021Jan_opg4_lec5\2021Jan_opg4_lec5.fsproj", "{15ED7F84-FF68-448B-8B14-71ADBF215C16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +221,10 @@ Global
 		{1AECA00D-303F-4EAD-8789-CC33CD240FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AECA00D-303F-4EAD-8789-CC33CD240FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AECA00D-303F-4EAD-8789-CC33CD240FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15ED7F84-FF68-448B-8B14-71ADBF215C16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15ED7F84-FF68-448B-8B14-71ADBF215C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15ED7F84-FF68-448B-8B14-71ADBF215C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15ED7F84-FF68-448B-8B14-71ADBF215C16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

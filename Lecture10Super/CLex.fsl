@@ -34,7 +34,11 @@ let keyword s =
     | "setcdr"  -> SETCDR     
     | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
-    | "while"   -> WHILE         
+    | "while"   -> WHILE
+    | "createTable" -> CREATETABLE   (* Jan2021 *)
+    | "updateTable" -> UPDATETABLE   (* Jan2021 *)
+    | "indexTable"  -> INDEXTABLE    (* Jan2021 *)
+    | "printTable"  -> PRINTTABLE    (* Jan2021 *) 
     | _         -> NAME s
  
 let cEscape s = 

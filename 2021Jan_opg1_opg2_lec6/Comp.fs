@@ -219,6 +219,18 @@ and cAccess access varEnv funEnv : instr list =
     | AccDeref e -> cExpr e varEnv funEnv
     | AccIndex(acc, idx) -> cAccess acc varEnv funEnv 
                             @ [LDI] @ cExpr idx varEnv funEnv @ [ADD]
+    | CondExpAccess(expr, access, access1) ->
+        let lab1 = newLabel()
+        let lab2 = newLabel()
+        cExpr expr varEnv funEnv // E[[ e1 ]]
+        @ [IFZERO lab1] //IFZERO lab1
+        @ cAccess access varEnv funEnv //A[[ ae1 ]]
+        @ [GOTO lab2] //GOTO lab2
+        @ [Label lab1] //lab1: //Hvis false
+        @ cAccess access1 varEnv funEnv //A[[ ae2 ]]
+        @ [Label lab2] //lab2:  //Efter hele if statement
+    
+    (* Generate code to evaluate a list of declarations: *)
 
 (* Generate code to evaluate a list es of expressions: *)
 
