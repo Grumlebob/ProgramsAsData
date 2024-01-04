@@ -34,7 +34,9 @@ type expr =
   | And of expr * expr
   | Or  of expr * expr
   | Seq of expr * expr
-  | Every of expr 
+  | Every of expr
+  | Bang of string
+  | BangN of string * int
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -98,6 +100,34 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
     | Every e -> 
       eval e (fun _ -> fun econt1 -> econt1 ())
              (fun () -> cont (Int 0) econt)
+    | Bang(str) ->
+        //explode string to add space between each char
+        let rec loop (inputString:string) =
+            if inputString.Length = 0 then
+                econt ()
+            else
+                let c = inputString.[0]
+                let rest = inputString.Substring(1)
+                cont (Str (string c))  (fun () -> loop (rest))
+        loop str     
+    | BangN(str:string,times:int) ->
+        //do Bang n times
+        let rec outerLoop (inputString:string) (times:int) =
+            
+            if times = 0 then
+                econt ()
+            else
+                let rec loop (inputString:string) =
+                    if inputString.Length = 0 then
+                        outerLoop str (times-1)
+                    else
+                        let c = inputString.[0]
+                        let rest = inputString.Substring(1)
+                        cont (Str (string c))  (fun () -> loop (rest))
+                loop str
+        outerLoop str times
+        
+        
     | Fail -> econt ()
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -137,3 +167,26 @@ let ex8 = Write(Prim("<", CstI 4, FromTo(1, 10)));
 
 // every(write(4 < (1 to 10)))
 let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))));
+
+
+//Exam 2018Jan
+//opg 1
+let iconEx1 = Every(Write(Or(FromTo(1, 2), FromTo(3,4))))
+// rewrite så værdierne 3 4 3 4 udskrives
+let iconEx1Rewritten = Every(Write(And(FromTo(1, 2), FromTo(3,4))))
+
+//opg 2 - Write "I C O N"
+let iconEx2 = And(Seq(Write(CstS "I"), Seq(Write(CstS "C"), Seq(Write(CstS "O"), Write(CstS "N")))),CstI 0)
+//I C O N val it: value = Int 0
+
+//opg 3 - implement Bang(string)
+(*
+dotnet fsi Icon.fs
+open Icon;;
+*)
+let iconEx3 = Every(Write(Bang "Icon"));;
+//run iconEx3;;
+
+//opg 4 - implement BangN(string, int)
+let iconEx4 = Every(Write(BangN("Icon", 2)));;
+//run iconEx4;;

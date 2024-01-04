@@ -5,5 +5,8 @@ Essencen 2018 jan:
 3: Micro-ML - lecture 5
 4: Micro-C - lecture 6
 
+Icon:
+se icon.fs i bunden for opgaverne
+
 
 

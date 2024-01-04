@@ -29,6 +29,7 @@ C. Loading a continuation-based interpreter for micro-Icon, a language
    in which an expression can have multiple results:
 
    fsharpi Icon.fs
+   dotnet fsi Icon.fs
 
    open Icon;;
    run ex1;;

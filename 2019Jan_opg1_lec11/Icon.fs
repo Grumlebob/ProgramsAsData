@@ -22,6 +22,8 @@
 
 module Icon
 
+open System
+
 (* Micro-Icon abstract syntax *)
 
 type expr = 
@@ -34,7 +36,8 @@ type expr =
   | And of expr * expr
   | Or  of expr * expr
   | Seq of expr * expr
-  | Every of expr 
+  | Every of expr
+  | Find of string * string 
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -98,6 +101,22 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
     | Every e -> 
       eval e (fun _ -> fun econt1 -> econt1 ())
              (fun () -> cont (Int 0) econt)
+    | Find (patternToMatch, inputString )->
+        (*
+        let str = "Hi there - if there are anyone"
+        > val str : string = "Hi there - if there are anyone"
+        run (Every(Write(Find("there",str))))
+        > 3 14 val it : value = Int 0*)
+        let rec loop (currentIndex:int) =
+            let foundIndex = inputString.IndexOf(patternToMatch,currentIndex)
+            if foundIndex = -1 then
+                econt ()
+            else
+                cont (Int foundIndex)  (fun () -> loop (foundIndex+1))
+        
+        loop 0    
+            
+
     | Fail -> econt ()
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -136,4 +155,15 @@ let ex7 = Every(Write(Prim("+", FromTo(1,3), FromTo(4, 6))));
 let ex8 = Write(Prim("<", CstI 4, FromTo(1, 10)));
 
 // every(write(4 < (1 to 10)))
-let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))));
+let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))))
+
+//Exam 2019 opg 1:
+let iconEx1 = Write(Prim("<",CstI 7,FromTo(1,10)))
+//Rewritten to write 8 9 10
+let iconEx1Rewritten = Every(Write(Prim("<",CstI 7,FromTo(1,10))))
+
+//Exam 2019 opg 2:
+let iconEx2 = Every(Write(And(FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
+//rewritten to write 1,2,3,4 .....4 8 12 16
+let iconEx2Rewritten = Every(Write(Prim("*", FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
+

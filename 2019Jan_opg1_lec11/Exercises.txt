@@ -6,5 +6,25 @@ Essencen 2019 Jan:
 4. Micro-C - Breakpoints Lecture 6
 
 
+Icon:
+se icon.fs i bunden for opgaverne
 
+opgave 3 - Find:
+dotnet fsi Icon.fs
+open Icon;;
+let str = "Hi there - if there are anyone";;
+run (Every(Write(Find("there",str))));;
 
+opgave 5 - Find alle 'e' i en streng:
+dotnet fsi Icon.fs
+open Icon;;
+let str = "Hi there - if there are anyone";;
+run (Every(Write(Find("e",str))));;
+//should be 5 7 16 18 22 29 val it: value = Int 0
+
+opgave 6 - Find alle 'e' i en streng med indeks større end 10:
+dotnet fsi Icon.fs
+open Icon;;
+let str = "Hi there - if there are anyone";;
+run (Every(Write(Prim("<",CstI 10,Find("e",str)))));;
+//should be 16 18 22 29 val it : value = Int 0
