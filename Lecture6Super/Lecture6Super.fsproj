@@ -11,6 +11,11 @@
         <ClCompile Include="2021Opg2_ex1.c" />
         <ClCompile Include="2021Opg2_ex2.c" />
         <Content Include="2021Opg2_2_stackAfterAlias.txt" />
+        <ClCompile Include="2022PrintStack.c" />
+        <ClCompile Include="2022Within.c" />
+        <ClCompile Include="2019decPrintVariableEnv.c" />
+        <ClCompile Include="2019decPrintStackFrame.c" />
+        <Content Include="2022PrintStack.out" />
         <Compile Include="Program.fs" />
         <Compile Include="Machine.fs" />
         <Compile Include="Absyn.fs" />

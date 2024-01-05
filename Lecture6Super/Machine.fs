@@ -41,6 +41,10 @@ type instr =
   | PRINTC                             (* print s[sp] as character        *)
   | LDARGS                             (* load command line args on stack *)
   | STOP                               (* halt the abstract machine       *)
+  | PRINTSTACK                         (* 2022 exam print the stack       *)
+  | PRINTCURFRM of (int * string) list (* 2019 exam: [(o_1,s_1);...; - PRINTCURFRM [(0, "n"); (1, "p"); (3, "pn"); (6, "a")] *)
+                                       (* o= offset                       *)
+                                       (* s= variable                     *)
 
 (* Generate new distinct labels *)
 
@@ -90,7 +94,10 @@ let CODERET    = 21
 let CODEPRINTI = 22 
 let CODEPRINTC = 23
 let CODELDARGS = 24
-let CODESTOP   = 25;
+let CODESTOP   = 25
+let CODEPRINTSTACK = 26
+let CODEPRINTCURFRM = 27
+
 
 (* Bytecode emission, first pass: build environment that maps 
    each label to an integer address in the bytecode.
@@ -125,6 +132,11 @@ let makelabenv (addr, labenv) instr =
     | PRINTC         -> (addr+1, labenv)
     | LDARGS         -> (addr+1, labenv)
     | STOP           -> (addr+1, labenv)
+    | PRINTSTACK     -> (addr+1, labenv) // 2022 exam
+    | PRINTCURFRM envList  -> //2019 exam
+                        //Find ud af hvor meget plads der skal allokeres til at gemme envList i program counter                        
+                        let len (i,s1:string) = 1 + s1.Length + 1
+                        (addr + (List.fold (fun acc currentElement -> acc + len currentElement) 2 envList), labenv) //plus 2, fordi instructionen selv, plus N længden.
 
 (* Bytecode emission, second pass: output bytecode as integers *)
 
@@ -157,6 +169,13 @@ let rec emitints getlab instr ints =
     | PRINTC         -> CODEPRINTC :: ints
     | LDARGS         -> CODELDARGS :: ints
     | STOP           -> CODESTOP   :: ints
+    | PRINTSTACK     -> CODEPRINTSTACK :: ints
+    | PRINTCURFRM env -> //2019 exam
+                    let codeString (s:string) = s.Length :: [for c in s -> (int) c]
+                    let codeVar (i,s) C = i :: (codeString s @ C)
+                    CODEPRINTCURFRM :: 
+                    List.length env ::
+                    (List.foldBack codeVar env ints) //Vi lægger instruction 26 på dernæst antal af variabler, dernæst variablerne selv som ints med deres o og l (offset og længde)
 
 (* Convert instruction list to int list in two passes:
    Pass 1: build label environment

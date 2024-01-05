@@ -4,13 +4,6 @@ Compiling and loading the micro-C evaluator and parser (MicroC/README.TXT)
 Archive microc.zip contains the files used in points A, B and C below.
 
 
-
-Garbage collection opgaver instrucitoner:
-1. Cd ind i assignment9/listVM/listVM
-2. gcc -o listmachine listmachine.c
-3. ./listmachine ../../ex30.out 1000
-
-
 A. Generating and compiling the lexer and parser for micro-C, and
    loading the interpreter for micro-C.
 
@@ -21,7 +14,6 @@ A. Generating and compiling the lexer and parser for micro-C, and
 Jacob:
 fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
 dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Interp.fs ParseAndRun.fs
-
 
    open ParseAndRun;;
    fromFile "ex1.c";;

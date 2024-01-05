@@ -23,6 +23,7 @@ and expr =
   | Andalso of expr * expr           (* Sequential and              *)
   | Orelse of expr * expr            (* Sequential or               *)
   | Call of string * expr list       (* Function call f(...)        *)
+  | WithIn of expr * expr * expr     (* Exam 2022 Interval check    *)
                                                                    
 and access =                                                       
   | AccVar of string                 (* Variable access        x    *) 
@@ -30,11 +31,13 @@ and access =
   | AccIndex of access * expr        (* Array indexing         a[e] *)
                                                                    
 and stmt =                                                         
-  | If of expr * stmt * stmt         (* Conditional                 *)
-  | While of expr * stmt             (* While loop                  *)
-  | Expr of expr                     (* Expression statement   e;   *)
-  | Return of expr option            (* Return from method          *)
-  | Block of stmtordec list          (* Block: grouping and scope   *)
+  | If of expr * stmt * stmt         (* Conditional                   *)
+  | While of expr * stmt             (* While loop                    *)
+  | Expr of expr                     (* Expression statement   e;     *)
+  | Return of expr option            (* Return from method            *)
+  | Block of stmtordec list          (* Block: grouping and scope     *)
+  | PrintStack of expr               (* 2022 exam - Print stack       *)
+  | PrintCurFrame                    (* 2019dec - Print current frame *)
                                                                    
 and stmtordec =                                                    
   | Dec of typ * string              (* Local variable declaration  *)
@@ -47,3 +50,11 @@ and topdec =
 
 and program = 
   | Prog of topdec list
+
+let rec ppTyp (t:typ) : string =
+  match t with
+  | TypI -> "int"
+  | TypC -> "char"
+  | TypA (t, None) -> ppTyp t + "[]"
+  | TypA (t, Some n) -> "(" + ppTyp t + "[" + string n + "])"
+  | TypP t -> "(*" + ppTyp t + ")"

@@ -56,14 +56,47 @@ type var =
 (* The variable environment keeps track of global and local variables, and 
    keeps track of next available offset for local variables *)
 
-type varEnv = (var * typ) env * int
+type varEnv = (var * typ) env * int //int = next index for local variable
 
 (* The function environment maps function name to label and parameter decs *)
 
-type paramdecs = (typ * string) list
-type funEnv = (label * typ option * paramdecs) env
+type paramdecs = (typ * string) list //List of (type, parameter)
+type funEnv = (label * typ option * paramdecs) env //Maps function name to (label, returntype, parametertypes)
 
 (* Bind declared variable in env and generate code to allocate it: *)
+
+// Exam 2022 Dec - Print Variable Enviroment
+let ppVar (v:var) : string =
+  match v with
+  | Glovar i -> "Glovar[" + i.ToString() + "]"
+  | Locvar i -> "bp[" + i.ToString() + "]"
+
+let ppVarTyp (s:string,(v:var,t:typ)) : string = //formater variable s, som har addressen v og type t
+  s + ":" + ppTyp t + " at " + ppVar v
+
+let exVarEnv : varEnv =
+  ([("a", (Locvar 6, TypA (TypI,Some 2))); //bruger 4,5,6
+  ("pn", (Locvar 3, TypA (TypP TypI,Some 1))); //bruger 2,3
+  ("p", (Locvar 1, TypP TypI));
+  ("n", (Locvar 0, TypI));
+  ("g", (Glovar 0, TypI))], 7) //7 er næste index for locale variabler.
+
+let ppVarEnv (e:varEnv) : string list =
+  let (env,_) = e
+  List.rev (List.map ppVarTyp env)
+
+let printVarEnv varEnv =
+  List.iter (printf "\n%s") (ppVarEnv varEnv);
+  printf "\n"
+
+(* 2019Dec exam helper functions *)
+let isLocvar = function
+  | Glovar _ -> false
+  | Locvar _ -> true
+
+let getOffset = function
+  | Glovar i -> i
+  | Locvar i -> i
 
 let allocate (kind : int -> var) (typ, x) (varEnv : varEnv) : varEnv * instr list =
     let (env, fdepth) = varEnv 
@@ -133,7 +166,9 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) : instr list =
     | Block stmts -> 
       let rec loop stmts varEnv =
           match stmts with 
-          | []     -> (snd varEnv, [])
+          | []     ->
+            printVarEnv varEnv //Exam 2019 Dec - Outcomment to not print variable enviroment
+            (snd varEnv, [])
           | s1::sr -> 
             let (varEnv1, code1) = cStmtOrDec s1 varEnv funEnv
             let (fdepthr, coder) = loop sr varEnv1 
@@ -144,6 +179,11 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) : instr list =
       [RET (snd varEnv - 1)]
     | Return (Some e) -> 
       cExpr e varEnv funEnv @ [RET (snd varEnv)]
+    | PrintStack e -> //Exam 2022
+      cExpr e varEnv funEnv @ [PRINTSTACK]
+    | PrintCurFrame -> (* Exam 2019dec *)
+      let varEnv' = List.filter (fun (_,(v,_)) -> isLocvar v) (fst varEnv) //Vi vil kun have de lokale variabler
+      [PRINTCURFRM (List.map (fun (s,(v,_)) -> (getOffset v, s)) (List.rev varEnv'))] //Vi vil have dem i omvendt rækkefølge, da de er i omvendt rækkefølge i varEnv
 
 and cStmtOrDec stmtOrDec (varEnv : varEnv) (funEnv : funEnv) : varEnv * instr list = 
     match stmtOrDec with 
@@ -214,6 +254,24 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list =
       @ cExpr e2 varEnv funEnv
       @ [GOTO labend; Label labtrue; CSTI 1; Label labend]
     | Call(f, es) -> callfun f es varEnv funEnv
+    | WithIn(e,e1,e2) -> //2022 exam
+      let labend = newLabel()
+      let labfalse = newLabel()
+      //e1 < e < e2
+   
+      // e >= e1
+      cExpr e varEnv funEnv //E[e]                      // i2 ift til compile scheme
+      @ cExpr e1 varEnv funEnv //E[e1]                  // i1 ift til compile scheme
+      @ [LT; NOT; IFZERO labfalse;] //E[e1] e >= e1        //LT: e < e1  -> NOT: -> e >= e1  (e skal være størrer, så hvis 0, så er den ikke størrer og gå til labend og print false)
+      // e <= e2
+      @ cExpr e2 varEnv funEnv //E[e2]                  // i2 ift til compile scheme, bemærk byttet rundt ift til ovenstående, da vi nu skal være mindre
+      @ cExpr e varEnv funEnv //E[e]                    // i1 ift til compile scheme
+      @ [LT; NOT; IFZERO labfalse] // e <= e2             //LT: e2 < e  -> NOT: -> e2 >= e  (e skal være mindrer, så hvis 0, så er den ikke mindrer og gå til labend og print false)
+      //e was within, return 1
+      @ [CSTI 1; GOTO labend;]
+      //e was not within, return 0
+      @ [Label labfalse; CSTI 0;]
+      @ [Label labend;]
 
 (* Generate code to access variable, dereference pointer or index array.
    The effect of the compiled code is to leave an lvalue on the stack.   *)

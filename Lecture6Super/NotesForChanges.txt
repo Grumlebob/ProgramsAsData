@@ -9,6 +9,9 @@
     //2021 Jan Alias as:
   | "alias"   -> ALIAS
   | "as"      -> AS
+
+    //2022 PrintStack:
+  | "printstack"   -> PRINTSTACK
     
 --------Added to Yacc:----------    
     //2021 Jan L-værdi betinget 
@@ -18,6 +21,11 @@
     //2021 Jan Alias as:
   | ALIAS NAME AS NAME SEMI StmtOrDecSeq     { Alias ($2, $4 ) :: $6 }  /* 2021 Jan  */
 
+    //2022 PrintStack:
+%nonassoc PRINTSTACK         /* 2022 Jan */
+StmtM:
+  | PRINTSTACK Expr SEMI                { PrintStack($2)       }
+
 --------Added to Comp.fs:----------
 //2021 Jan Alias as:
     | Alias(x, y) ->
@@ -25,9 +33,41 @@
         let (lookupY, typeY) = lookup env y
         let newEnv = ((x, (lookupY, typeY)) :: env, fdepth)
         (newEnv, [])
---------Added to Machine.fs:----------
 
---------Added to Machine.java:----------
+
+--------Added to Machine.fs:---------- (Tilføjer typer af instructions)
+    //2022 PrintStack:
+type instr =
+| PRINTSTACK 
+    
+--------Added to Machine.java:---------- (Behandler instructions)
+    //2022 PrintStack:
+Taget TA's svar og er pt. forkert.
+
+--------Added to comp.fs:---------- (Behandler compiling til nye instructions)
+    //2022 PrintStack:
+cStmnt:    
+    | PrintStack e -> //Exam 2022
+      cExpr e varEnv funEnv @ [PRINTSTACK]
+
+    //2022 Within:
+cExpr:
+    | WithIn(e,e1,e2) -> //2022 exam
+      let labend = newLabel()
+      //e1 < e < e2
+   
+      // e >= e1
+      cExpr e varEnv funEnv //E[e]                      // i2 ift til compile scheme
+      @ cExpr e1 varEnv funEnv //E[e1]                  // i1
+      @ [LT; NOT; IFZERO labend] //E[e1] e >= e1        //LT: e < e1  -> NOT: -> e >= e1  (e skal være størrer, så hvis 0, så er den ikke størrer og gå til labend og print false)
+      // e <= e2
+      @ cExpr e2 varEnv funEnv //E[e2]                  // i2 ift til compile scheme, bemærk byttet rundt ift til ovenstående, da vi nu skal være mindre
+      @ cExpr e varEnv funEnv //E[e]                    // i1 ift til compile scheme
+      @ [LT; NOT; IFZERO labend] // e <= e2             //LT: e2 < e  -> NOT: -> e2 >= e  (e skal være mindrer, så hvis 0, så er den ikke mindrer og gå til labend og print false)
+      //e was within, return 1
+      @ [CSTI 1; RET 1]
+      //e was not within, return 0
+      @ [Label labend; CSTI 0; RET 1]
 
 ---------Commands to test code----------
     //2021 Jan L-værdi betinget
@@ -63,3 +103,62 @@ compileToFile (fromFile "2021opg2_ex1.c") "2021opg2_ex1.out";;
 javac Machine.java
 java .\Machine.java .\2021opg2_ex1.out 10
 java .\Machine.java .\2021opg2_ex2.out 10
+
+    //2022 PrintStack:
+1: vis jeg får rigtige Abstract syntax
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Interp.fs ParseAndRun.fs
+
+open ParseAndRun;;
+fromFile "2022PrintStack.c";;
+
+2: Vis at det virker (giver forkert print pt)
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+compileToFile (fromFile "2022PrintStack.c") "2022PrintStack.out";;
+javac Machine.java
+java .\Machine.java .\2022PrintStack.out 10
+
+3: Within: (virker 98%, men giver slightly forkert print)
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+compileToFile (fromFile "2022Within.c") "2022Within.out";;
+javac Machine.java
+java .\Machine.java .\2022Within.out
+
+    //2019Dec Print Variable Environment:
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+1:
+open Absyn;;
+open Comp;;
+let exVarEnv : varEnv = ([("a", (Locvar 6, TypA (TypI,Some 2)));("pn", (Locvar 3, TypA (TypP TypI,Some 1)));("p", (Locvar 1, TypP TypI));("n", (Locvar 0, TypI));("g", (Glovar 0, TypI))], 7);;
+ppVarEnv exVarEnv;;
+
+2: Nu med printVarEnv inde i Block:
+open ParseAndComp;;
+compileToFile (fromFile "2019decPrintVariableEnv.c") "2019decPrintVariableEnv.out";;
+
+    //2019Dec Print Current Stack Frame:
+1: Vis abstract syntax tree
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+fromFile "2019decPrintStackFrame.c";;
+
+2: Kør programmet og se stacken
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+compileToFile (fromFile "2019decPrintStackFrame.c") "2019decPrintStackFrame.out";;
+javac Machine.java
+java .\Machine.java .\2019decPrintStackFrame.out
+
+    //2019Jan Breakpoints:
