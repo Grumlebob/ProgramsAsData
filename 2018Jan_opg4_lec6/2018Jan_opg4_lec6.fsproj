@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ClCompile Include="2018Bytecode_2.c" />
         <Content Include="Exercises.txt" />
         <Compile Include="Program.fs"/>
         <Compile Include="Absyn.fs" />
@@ -17,11 +18,11 @@
         <Compile Include="CPar.fsi" />
         <Content Include="CPar.fsy" />
         <Compile Include="Comp.fs" />
+        <Compile Include="Machine.fs" />
         <Compile Include="Contcomp.fs" />
         <Content Include="FSharp.Core.dll" />
         <Compile Include="Interp.fs" />
         <Content Include="Machine.class" />
-        <Compile Include="Machine.fs" />
         <Content Include="Machine.java" />
         <Content Include="Machinetrace.class" />
         <Compile Include="MicroCC.fs" />

@@ -36,7 +36,9 @@ class Machine {
       LDARGS = 24,
       STOP = 25,
       PRINTSTACK = 26,
-      PRINTCURFRM = 27;
+      PRINTCURFRM = 27,
+      BREAK = 28,
+      WAITKEYPRESS = 29;
 
   final static int STACKSIZE = 1000;
 
@@ -195,14 +197,31 @@ class Machine {
             System.out.print("\n");
           }
           break;
+        case BREAK:
+          printsppc(s, bp, sp, p, pc);
+          break;
+        case WAITKEYPRESS:
+          System.out.println("Press ENTER to Continue");
+          try {
+            // System.in.read()
+            // i only want to read enter
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextLine();
+
+          } catch (Exception e) {
+            System.out.println("Error in waiting for ENTER.");
+          }
+
+          break;
         default:
           throw new RuntimeException("Illegal instruction " + p[pc - 1]
               + " at address " + (pc - 1));
       }
+
     }
   }
 
-  static void printStr(int[] p, int pc) { //2019 exam
+  static void printStr(int[] p, int pc) { // 2019 exam
     for (int i = 0; i < p[pc]; i++)
       System.out.print((char) (p[pc + 1 + i]));
   }
@@ -301,6 +320,10 @@ class Machine {
         return "LDARGS";
       case STOP:
         return "STOP";
+      case BREAK:
+        return "BREAK";
+      case WAITKEYPRESS:
+        return "WAITKEYPRESS";
       default:
         return "<unknown>";
     }

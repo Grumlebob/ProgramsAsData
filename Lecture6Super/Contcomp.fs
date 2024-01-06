@@ -216,6 +216,16 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : instr 
       RET (snd varEnv - 1) :: deadcode C
     | Return (Some e) -> 
       cExpr e varEnv funEnv (RET (snd varEnv) :: deadcode C)
+    | Break e ->
+        //evaluate expr
+        //hvis expr er true, så indsæt waitkeypress label
+        //hvis false hop forbi waitkeypress
+        //let (labelend, restOfInstructions) = addLabel C
+        //let restOfInstructions = BREAK :: IFZERO labelend :: WAITKEYPRESS :: (*labend er her, grundet addLabel C*) restOfInstructions
+        //cExpr expr varEnv funEnv restOfInstructions
+        
+        let(labNoKeyPress,C1)= addLabel C
+        cExpr e varEnv funEnv (BREAK::IFZERO labNoKeyPress :: WAITKEYPRESS :: (*labNoKeyPress er her, grundet addLabel C*) C1)
 
 and bStmtordec stmtOrDec varEnv : bstmtordec * varEnv =
     match stmtOrDec with 

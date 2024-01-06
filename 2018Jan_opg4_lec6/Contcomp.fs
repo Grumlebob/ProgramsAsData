@@ -134,6 +134,24 @@ type funEnv = (label * typ option * paramdecs) env
 
 (* Bind declared variable in varEnv and generate code to allocate it: *)
 
+//EXAM 2018
+let rec reducePrim2 e =
+    let eReduced =
+        match e with
+        | Prim2(ope,e1,e2) ->
+            let e1Reduced = reducePrim2 e1
+            let e2Reduced = reducePrim2 e2
+            match (ope, e1Reduced, e2Reduced) with
+            | ("+", CstI i, CstI j)  -> CstI (i+j)
+            | ("-", CstI i, CstI j)  -> CstI (i-j)
+            | ("*", CstI i, CstI j)  -> CstI (i*j)
+            | ("/", CstI i, CstI j)  -> CstI (i/j)
+            | _ -> Prim2(ope, e1Reduced, e2Reduced)
+        | e -> e
+    if e <> eReduced then printfn "ReducePrim2: Expression %A reduced to %A" e eReduced
+    eReduced
+
+
 let allocate (kind : int -> var) (typ, x) (varEnv : varEnv) : varEnv * instr list =
     let (env, fdepth) = varEnv 
     match typ with
@@ -254,8 +272,11 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : inst
            | "printc" -> PRINTC :: C
            | _        -> failwith "unknown primitive 1")
     | Prim2(ope, e1, e2) ->
-      cExpr e1 varEnv funEnv
-        (cExpr e2 varEnv funEnv
+      let e1Reduced = reducePrim2 e1 (* Exam *)
+      let e2Reduced = reducePrim2 e2 (* Exam *)
+      
+      cExpr e1Reduced varEnv funEnv
+        (cExpr e2Reduced varEnv funEnv
            (match ope with
             | "*"   -> MUL  :: C
             | "+"   -> ADD  :: C
@@ -365,5 +386,6 @@ let contCompileToFile program fname =
     let instrs   = cProgram program 
     let bytecode = code2ints instrs
     intsToFile bytecode fname; instrs
+
 
 (* Example programs are found in the files ex1.c, ex2.c, etc *)

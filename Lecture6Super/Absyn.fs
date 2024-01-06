@@ -38,6 +38,7 @@ and stmt =
   | Block of stmtordec list          (* Block: grouping and scope     *)
   | PrintStack of expr               (* 2022 exam - Print stack       *)
   | PrintCurFrame                    (* 2019dec - Print current frame *)
+  | Break of expr                    (* 2019jan exam - Break           *)
                                                                    
 and stmtordec =                                                    
   | Dec of typ * string              (* Local variable declaration  *)

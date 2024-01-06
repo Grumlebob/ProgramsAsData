@@ -9,6 +9,11 @@
         <Content Include="NotesForChanges.txt" />
         <Content Include="README.TXT" />
         <ClCompile Include="2021Opg2_ex1.c" />
+        <ClCompile Include="2019BreakTrue.c" />
+        <ClCompile Include="2018Bytecode.c" />
+        <ClCompile Include="2018Bytecode_2.c" />
+        <ClCompile Include="2019BreakFalse.c" />
+        <ClCompile Include="2019Arrays.c" />
         <ClCompile Include="2021Opg2_ex2.c" />
         <Content Include="2021Opg2_2_stackAfterAlias.txt" />
         <ClCompile Include="2022PrintStack.c" />

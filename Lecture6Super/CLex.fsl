@@ -30,9 +30,10 @@ let keyword s =
     | "while"   -> WHILE
     | "alias"   -> ALIAS
     | "as"      -> AS
-    | "printStack" -> PRINTSTACK  (* exam 2022 *)
-    | "within"  -> WITHIN    (* exam 2022 *)
-    | "printCurFrame" -> PRINTCURFRAME     (* exam 2019dec *)
+    | "printStack" -> PRINTSTACK            (* exam 2022 *)
+    | "within"  -> WITHIN                   (* exam 2022 *)
+    | "printCurFrame" -> PRINTCURFRAME      (* exam 2019dec *)
+    | "break"   -> BREAK                    (* exam 2019jan *)
     | _         -> NAME s
  
 let cEscape s = 

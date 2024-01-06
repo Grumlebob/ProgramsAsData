@@ -125,11 +125,13 @@ way with labels only at the beginning of the line (as in this chapter). Write th
 corresponding micro-C code to the right of the stack machine code. Note that ex5.c
 has a nested scope (a block ... inside a function body); how is that visible in the
 generated code?
-Execute the compiled programs using java Machine ex3.out 10 and
-similar. Note that these micro-C programs require a command line argument (an
+Execute the compiled programs using 
+java Machine ex3.out 10 
+and similar. Note that these micro-C programs require a command line argument (an
 integer) when they are executed.
-Trace the execution using java Machinetrace ex3.out 4, and explain
-the stack contents and what goes on in each step of execution, and especially how the
+Trace the execution using 
+java Machinetrace ex3.out 4
+, and explain the stack contents and what goes on in each step of execution, and especially how the
 low-level bytecode instructions map to the higher-level features of MicroC. You can
 capture the standard output from a command prompt (in a file ex3trace.txt)
 using the Unix-style notation:

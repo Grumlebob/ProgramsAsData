@@ -40,11 +40,11 @@ StmtM:
 type instr =
 | PRINTSTACK 
     
---------Added to Machine.java:---------- (Behandler instructions)
+--------Added to Machine.java:---------- (Behandler selve instrucitonerne, aka topstack og næstentopstack plus med hinanden)
     //2022 PrintStack:
 Taget TA's svar og er pt. forkert.
 
---------Added to comp.fs:---------- (Behandler compiling til nye instructions)
+--------Added to comp.fs:---------- (Compiler til selve instruktionerne, aka CstI1, CstI2, Add)
     //2022 PrintStack:
 cStmnt:    
     | PrintStack e -> //Exam 2022
@@ -162,3 +162,53 @@ javac Machine.java
 java .\Machine.java .\2019decPrintStackFrame.out
 
     //2019Jan Breakpoints:
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Contcomp.fs ParseAndContcomp.fs   
+
+open ParseAndContcomp;;
+contCompileToFile (fromFile "2019BreakTrue.c") "2019BreakTrue.out";;
+
+javac Machine.java
+java .\Machine.java .\2019BreakTrue.out 10
+//Med trace
+java Machinetrace 2019BreakTrue.out 10
+
+    //2019Jan array stack:
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Contcomp.fs ParseAndContcomp.fs   
+
+open ParseAndContcomp;;
+contCompileToFile (fromFile "2019Arrays.c") "2019Arrays.out";;
+
+java Machinetrace 2019Arrays.out
+
+    //2018jan Optimized bytecode:
+1.
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Contcomp.fs ParseAndContcomp.fs   
+
+open ParseAndContcomp;;
+contCompileToFile (fromFile "2018Bytecode.c") "2018Bytecode.out";;
+
+javac Machine.java
+java Machinetrace 2018Bytecode.out
+//eller indsæt break true; som også printer stack på det tidspunkt og kør med:
+java .\Machine.java .\2018Bytecode.out
+
+2. Optimized reducePrim (i egen mappe)
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Contcomp.fs ParseAndContcomp.fs 
+
+open ParseAndContcomp;;
+contCompileToFile (fromFile "2018Bytecode_2.c") "2018Bytecode_2.out";;
+compile "2018Bytecode_2";;
+
+3: Frequency of instructions (i egen mappe)
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Contcomp.fs ParseAndContcomp.fs   
+
+open ParseAndContcomp;;
+contCompileToFile (fromFile "2018Bytecode_2.c") "2018Bytecode_2.out";;
+
+javac Machine.java
+java .\Machine.java .\2018Bytecode_2.out
