@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="README.TXT" />
         <Compile Include="Program.fs"/>
         <Compile Include="Factorial.cs" />
         <Content Include="Factorial2.java" />
@@ -20,7 +21,6 @@
         <Content Include="Factorial.class" />
         <Content Include="Factorial.java" />
         <Compile Include="Icon.fs" />
-        <Content Include="README.TXT" />
         <Content Include="testlongjmp" />
         <ClCompile Include="testlongjmp.c" />
     </ItemGroup>

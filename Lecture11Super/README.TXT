@@ -7,6 +7,7 @@ A. Loading two continuation-based interpreters for a functional
    language with exceptions:
 
    fsharpi Contfun.fs
+   
 
    open Contfun;;
    eval1 ex1 [];; 
@@ -29,6 +30,10 @@ C. Loading a continuation-based interpreter for micro-Icon, a language
    in which an expression can have multiple results:
 
    fsharpi Icon.fs
+ 
+jacob:
+dotnet fsi Icon.fs
+open Icon;;
 
    open Icon;;
    run ex1;;

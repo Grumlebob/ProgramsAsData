@@ -38,6 +38,8 @@ type expr =
   | Bang of string //2018 exam
   | BangN of string * int //2018 exam
   | Find of string * string //2019 exam
+  | Random of int * int * int //2022 exam Random(min,max,num) inclusive
+  | FromToBy of int * int * int //2017 exam (start, end, increment)
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -140,7 +142,23 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
                         cont (Str (string c))  (fun () -> loop (rest))
                 loop str
         outerLoop str times
-
+    | Random(min,max,num) -> //2022 exam
+        let random = new System.Random();
+        let randomNext(min, max) = random.Next(min,max+1) // max is exclusive in Next.
+        let rec loop (num:int) =
+            if num = 0 then
+                econt ()
+            else
+                let randomInt = randomNext(min,max)
+                cont (Int randomInt)  (fun () -> loop (num-1))
+        loop num
+    | FromToBy(startnum, endnum, increment) -> //2017 exam
+        let rec loop (currentnum:int) =
+            if currentnum > endnum then
+                econt ()
+            else
+                cont (Int currentnum)  (fun () -> loop (currentnum+increment))
+        loop startnum
         
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -203,6 +221,27 @@ let iconEx3_2018 = Every(Write(Bang "Icon"));;
 let iconEx4_2018 = Every(Write(BangN("Icon", 2)));;
 //run iconEx4;;
 
+(*
+(1,2,3,4) & (1,2,3,4)
+1: 1
+1: 2
+1: 3
+1: 4
+2: 1
+...
+4: 4
+
+(1,2,3,4) * (1,2,3,4)
+1: 1*1
+1: 1*2
+1: 1*3
+1: 1*4
+2: 2*1
+...
+4: 4*4
+
+*)
+
 //Exam 2019 opg 1:
 let iconEx1_2019 = Write(Prim("<",CstI 7,FromTo(1,10)))
 //Rewritten to write 8 9 10
@@ -212,3 +251,39 @@ let iconEx1Rewritten_2019 = Every(Write(Prim("<",CstI 7,FromTo(1,10))))
 let iconEx2_2019 = Every(Write(And(FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
 //rewritten to write 1,2,3,4 .....4 8 12 16
 let iconEx2Rewritten_2019 = Every(Write(Prim("*", FromTo(1,4), And(Write (CstS "\n"),FromTo(1,4)))))
+
+//Exam 2022 Opg 1: 1 2 3 4 5 6 7 8 9 10
+let iconEx1_2022 = Every(Write(FromTo(1,10)))
+
+//Exam 2022 Opg 2: 10 tabellen
+let iconEx2_2022 = Every(Write(Prim("*",FromTo(1,10),FromTo(1,10))))
+
+//Exam 2022 opg3: 10 tabellen på ny linje:
+let iconEx3_2022 = Every(Write(Prim("*", FromTo(1,10), And(Write (CstS "\n"),FromTo(1,10)))))
+
+//Exam 2022 opg4: Random
+let iconEx4_2022 = (Every(Write(Random(1,10,3))));;
+
+
+//Write an expression that produces and prints the values 21 22 31 32 41 42.
+//Inner function: 20,30,40
+//Outer function: 20+1 20+2 30+1 30+2 40+1 40+2
+let iconEx0_2017 = Every(Write(Prim("+",Prim("*", CstI 10, FromTo(2, 4)),FromTo(1,2))));;
+
+//exam 2017 write expression to get 33 34 43 44 53 54 63 64
+//Inner function: (3*10,4*10,5*10,6*10): 30,40,50,60
+//Outer function: 30+3, 30+4, 40+3, 40+4, 50+3, 50+4, 60+3, 60+4
+let iconEx1_2017 = Every(Write(Prim("+",Prim("*", CstI 10, FromTo(3, 6)),FromTo(3,4))));;
+
+//Exam 2017 FromToBy(s,e,i)
+let iconEx2_2017 = Every(Write(FromToBy(1,10,3)));;
+
+//Exam 2017 FromToBy(s,e,i) getting values 33 34 43 44 53 54 63 64
+let iconEx3_2017 = Every(Write(Prim("+",FromToBy(33,70,10),FromTo(0,1))));;
+
+//Exam 2017 FromToBy uendeligt
+let iconEx4_2017 = Every(Write(FromToBy(10, 11, 0)));;
+
+//Assignment 10  write an expression that prints the least multiple of 7 that is greater than 50.
+//print 56, 63, 70, 77, 84, 91, 98, 105, 112, 119, 126, ...
+let iconEx10 = Write(Prim("<",CstI 50,Prim("*", CstI 7, FromTo(1, 50))));;
