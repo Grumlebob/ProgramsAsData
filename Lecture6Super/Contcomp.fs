@@ -49,7 +49,7 @@ let addLabel C : label * instr list =          (* Conditional jump to C *)
     | _              -> let lab = newLabel() 
                         (lab, Label lab :: C)
 
-let makeJump C : instr * instr list =          (* Unconditional jump to C *)
+let makeJump C : instr * instr list =          (* Unconditional jump to C *) // aka vores goto
     match C with
     | RET m              :: _ -> (RET m, C)
     | Label lab :: RET m :: _ -> (RET m, C)
@@ -227,7 +227,7 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : instr 
         let(labNoKeyPress,C1)= addLabel C
         cExpr e varEnv funEnv (BREAK::IFZERO labNoKeyPress :: WAITKEYPRESS :: (*labNoKeyPress er her, grundet addLabel C*) C1)
 
-and bStmtordec stmtOrDec varEnv : bstmtordec * varEnv =
+and bStmtordec stmtOrDec varEnv : bstmtordec * varEnv = //Vores double pass af koden. Første pass er at finde alle deklarationer, anden pass er at finde alle statements.
     match stmtOrDec with 
     | Stmt stmt    ->
       (BStmt stmt, varEnv) 
