@@ -1,0 +1,22 @@
+opgave 1.1
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
+
+open ParseAndRunHigher;;    
+//almindelige test
+let test = fromString @"let q1 = [1 -> 2 -> 3] in let q2 = [1 -> 4] in let q3 = 5 ->> q1 ++ q2 in <<- q3 end end end";;
+
+// q1 = [1] altså kun element.
+let testMedQueueSomHarEnkeltElement = fromString @"let q1 = [1] in let q2 = [1 -> 4] in let q3 = 5 ->> q1 ++ q2 in <<- q3 end end end";;
+
+run (fromString @"let q1 = [1] in let q2 = [1 -> 4] in let q3 = 5 ->> q1 ++ q2 in <<- q3 end end end");;
+
+// [1 -> 2 -> 3] ->> q1.  Altså insert queue ind i tail af queue
+let testMedQueueInsertToQueue = fromString @"let q1 = [1 -> 2 -> 3] in let q2 = [1 -> 4] in let q3 = [1 -> 2 -> 3] ->> q1 ++ q2 in <<- q3 end end end";;
+
+run (fromString @"let q1 = [1 -> 2 -> 3] in let q2 = [1 -> 4] in let q3 = [1 -> 2 -> 3] ->> q1 ++ q2 in <<- q3 end end end");;
+
+//q1 = []. Opgaven specificere at queues ikke kan være tomme. Bør fejle.
+let testMedQueueSomHarNulElementerBørFejle = fromString @"let q1 = [] in let q2 = [1] in let q3 = 5 ->> q1 ++ q2 in <<- q3 end end end";;
+
+run (fromString @"let q1 = [] in let q2 = [1] in let q3 = 5 ->> q1 ++ q2 in <<- q3 end end end");;

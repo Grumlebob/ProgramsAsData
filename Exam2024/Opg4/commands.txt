@@ -1,0 +1,16 @@
+opgave 1.1
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+fromFile "record.c";;
+fromFile "recordOnlyCreation.c";;
+
+opgave 1.2
+fslex --unicode CLex.fsl; if ($?) { fsyacc --module CPar CPar.fsy }
+dotnet fsi -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs  
+
+open ParseAndComp;;
+compileToFile (fromFile "record.c") "record.out";;
+javac Machine.java
+java .\Machine.java .\record.out

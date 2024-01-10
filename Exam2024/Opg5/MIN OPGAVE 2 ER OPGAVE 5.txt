@@ -1,0 +1,27 @@
+opgave 1.1:
+
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy  }
+cd MsmlVM/src
+gcc -Wall msmlmachine.c -o msmlmachine
+cd..;cd..;
+
+fsc --standalone -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs TypeInference.fs HigherFun.fs Machine.fs Contcomp.fs ParseTypeAndRun.fs MicroSMLC.fs -o microsmlc.exe
+
+.\microsmlc.exe printstat.sml
+.\microsmlc.exe -opt printstat.sml
+.\microsmlc.exe -eval printstat.sml
+.\microsmlc.exe -verbose printstat.sml
+
+./MsmlVM/src/msmlmachine printstat.out
+
+opgave 1.2 vis at det fejler:
+fslex --unicode FunLex.fsl; if ($?) { fsyacc --module FunPar FunPar.fsy  }
+cd MsmlVM/src
+gcc -Wall msmlmachine.c -o msmlmachine
+cd..;cd..;
+
+fsc --standalone -r C:\Users\jgrum\Documents\Programming\FSharp\LexAndYacc\FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs TypeInference.fs HigherFun.fs Machine.fs Contcomp.fs ParseTypeAndRun.fs MicroSMLC.fs -o microsmlc.exe
+
+.\microsmlc.exe -verbose printstat.sml
+
+./MsmlVM/src/msmlmachine printstat.out

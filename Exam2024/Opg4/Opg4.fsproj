@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="obj\fsac.cache" />
+        <Content Include="commands.txt" />
+        <Content Include="CLex.fsl" />
+        <Content Include="CPar.fsy" />
+        <ClCompile Include="record.c" />
+        <ClCompile Include="recordOnlyCreation.c" />
+        <Compile Include="Program.fs"/>
+        <Compile Include="Absyn.fs" />
+        <Compile Include="Machine.fs" />
+        <Compile Include="Comp.fs" />
+        <Compile Include="Contcomp.fs" />
+        <Content Include="CPar.exe" />
+        <Compile Include="CPar.fs" />
+        <Compile Include="CPar.fsi" />
+        <ClCompile Include="ex1.c" />
+        <Content Include="ex1.out" />
+        <ClCompile Include="ex2.c" />
+        <Content Include="ex2.out" />
+        <ClCompile Include="ex3.c" />
+        <Content Include="ex3.out" />
+        <ClCompile Include="ex4.c" />
+        <Content Include="ex4.out" />
+        <ClCompile Include="ex5.c" />
+        <Content Include="ex5.out" />
+        <ClCompile Include="ex6.c" />
+        <Content Include="ex6.out" />
+        <ClCompile Include="ex7.c" />
+        <ClCompile Include="ex8.c" />
+        <Content Include="ex8.out" />
+        <ClCompile Include="ex9.c" />
+        <Content Include="ex9.out" />
+        <ClCompile Include="ex10.c" />
+        <Content Include="ex10.out" />
+        <ClCompile Include="ex11.c" />
+        <Content Include="ex11.out" />
+        <ClCompile Include="ex12.c" />
+        <Content Include="ex12.out" />
+        <Content Include="ex12notailcall.out" />
+        <Content Include="ex12tailcall.out" />
+        <ClCompile Include="ex13.c" />
+        <Content Include="ex13.out" />
+        <ClCompile Include="ex14.c" />
+        <ClCompile Include="ex15.c" />
+        <ClCompile Include="ex16.c" />
+        <ClCompile Include="ex17.c" />
+        <ClCompile Include="ex18.c" />
+        <ClCompile Include="ex19.c" />
+        <Content Include="ex19.out" />
+        <ClCompile Include="ex20.c" />
+        <ClCompile Include="ex21.c" />
+        <Content Include="ex21.out" />
+        <ClCompile Include="ex22.c" />
+        <Content Include="ex22.out" />
+        <ClCompile Include="ex23.c" />
+        <Content Include="ex23.out" />
+        <ClCompile Include="ex24.c" />
+        <ClCompile Include="ex25.c" />
+        <Content Include="ex25.code" />
+        <Content Include="ex25.out" />
+        <ClCompile Include="ex26.c" />
+        <Content Include="ex26.out" />
+        <Content Include="FSharp.Core.dll" />
+        <Content Include="grammar.txt" />
+        <Compile Include="Interp.fs" />
+        <Content Include="machine" />
+        <ClCompile Include="machine.c" />
+        <Content Include="Machine.class" />
+        <Content Include="Machine.java" />
+        <Content Include="Machinetrace.class" />
+        <Content Include="microcc.exe" />
+        <Compile Include="MicroCC.fs" />
+        <Content Include="out" />
+        <Compile Include="Parse.fs" />
+        <Compile Include="ParseAndComp.fs" />
+        <Content Include="a.out" />
+        <Content Include="bar" />
+        <Compile Include="CLex.fs" />
+    </ItemGroup>
+
+</Project>

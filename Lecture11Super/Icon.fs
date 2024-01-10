@@ -40,6 +40,7 @@ type expr =
   | Find of string * string //2019 exam
   | Random of int * int * int //2022 exam Random(min,max,num) inclusive
   | FromToBy of int * int * int //2017 exam (start, end, increment)
+  | RandomFromList of int * int list //2024 exam (numbersToGenerator, listOfNumbersToGeneratorFrom)
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -159,6 +160,25 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
             else
                 cont (Int currentnum)  (fun () -> loop (currentnum+increment))
         loop startnum
+    | RandomFromList(numbersToGenerator, listOfNumbersToGeneratorFrom) -> //2024 exam
+        //Fail if N is less than 0 or list is empty
+        if numbersToGenerator < 0 || listOfNumbersToGeneratorFrom = [] then
+            econt ()
+        else
+            let random = new System.Random()
+            //Max is exclusive, and we want inclusive
+            let randomNext(min, max) = random.Next(min,max+1)
+            
+            let rec loop (num:int) =
+                if num = 0 then
+                    econt () //No more results left
+                else
+                    //Get random index from list.
+                    let randomIndex = randomNext(0,listOfNumbersToGeneratorFrom.Length-1)
+                    let randomIntFromList = listOfNumbersToGeneratorFrom.[randomIndex]
+                    //Accept random number, and repeat loop with one less num
+                    cont (Int randomIntFromList)  (fun () -> loop (num-1))
+            loop numbersToGenerator //Start loop with N, decrement each loop and repeat until N is 0
         
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -287,3 +307,18 @@ let iconEx4_2017 = Every(Write(FromToBy(10, 11, 0)));;
 //Assignment 10  write an expression that prints the least multiple of 7 that is greater than 50.
 //print 56, 63, 70, 77, 84, 91, 98, 105, 112, 119, 126, ...
 let iconEx10 = Write(Prim("<",CstI 50,Prim("*", CstI 7, FromTo(1, 50))));;
+
+
+//Exam 2024
+//opg 1 1. Skriv et Icon udtryk, som udskriver værdierne 5 6 7 8 9 10 11 12 på skærmen:
+(*
+dotnet fsi Icon.fs
+open Icon;;
+*)
+let iconEx1_2024 = Every(Write(FromTo(5,12)));;
+
+//påg 1 2: Skriv et Icon udtryk, som udskriver alle tal n mellem 3 og 60, hvor 3 går op i tallet n:
+let iconEx2_2024 = Every(Write(Prim("*", CstI 3,FromTo(1,20))));;
+
+//opg 1 3: 3. Skriv et Icon udtryk, som udskriver alle tal n mellem 4 og 61, hvor 3 går op i n − 1:
+let iconEx3_2024 = Every(Write(Prim("+", CstI 1 ,Prim("*", CstI 3,FromTo(1,20)))));;

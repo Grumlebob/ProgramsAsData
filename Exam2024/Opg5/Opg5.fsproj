@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="commands.txt" />
+        <Content Include="MIN OPGAVE 2 ER OPGAVE 5.txt" />
+        <Content Include="printstat.sml" />
+        <Compile Include="Program.fs"/>
+        <Compile Include="Absyn.fs" />
+        <Compile Include="FunLex.fs" />
+        <Content Include="FunLex.fsl" />
+        <Compile Include="FunPar.fs" />
+        <Compile Include="FunPar.fsi" />
+        <Content Include="FunPar.fsy" />
+        <Compile Include="HigherFun.fs" />
+        <Content Include="list.out" />
+        <Content Include="list.sml" />
+        <Compile Include="Machine.fs" />
+        <Compile Include="TypeInference.fs" />
+        <Compile Include="Contcomp.fs" />
+        <Content Include="microsmlc.exe" />
+        <Compile Include="MicroSMLC.fs" />
+        <Compile Include="ParseTypeAndRun.fs" />
+        <None Include="queens.fsx" />
+        <Content Include="queens.out" />
+        <Content Include="queens.sml" />
+        <Content Include="README.txt" />
+        <Content Include="test.out" />
+        <Content Include="test.sh" />
+        <Content Include="test.sml" />
+        <Content Include="testgc.out" />
+        <Content Include="testgc.sml" />
+        <ClCompile Include="utils_unix.c" />
+        <ClCompile Include="utils_win.c" />
+        <ClCompile Include="MsmlVM\src\utils_win.c" />
+        <ClCompile Include="MsmlVM\src\utils_unix.c" />
+        <ClCompile Include="MsmlVM\src\msmlmachine.c" />
+        <Content Include="MsmlVM\src\msmlmachine" />
+        <Content Include="MsmlVM\MsmlVM.vcxproj.user" />
+        <Content Include="MsmlVM\MsmlVM.vcxproj.filters" />
+        <Content Include="MsmlVM\MsmlVM.vcxproj" />
+        <Content Include="MsmlVM\MsmlVM.sln" />
+        <Compile Include="Comp.fs" />
+        <Content Include="ex01.out" />
+        <Content Include="ex01.sml" />
+        <Content Include="ex02.out" />
+        <Content Include="ex02.sml" />
+        <Content Include="ex03.out" />
+        <Content Include="ex03.sml" />
+        <Content Include="ex04.out" />
+        <Content Include="ex04.sml" />
+        <Content Include="ex05.out" />
+        <Content Include="ex05.sml" />
+        <Content Include="ex06.sml" />
+        <Content Include="ex07.out" />
+        <Content Include="ex07.sml" />
+        <Content Include="ex08.out" />
+        <Content Include="ex08.sml" />
+        <Content Include="ex09.out" />
+        <Content Include="ex09.sml" />
+        <Content Include="ex10.out" />
+        <Content Include="ex10.sml" />
+        <Content Include="ex11.out" />
+        <Content Include="ex11.sml" />
+        <Content Include="ex12.out" />
+        <Content Include="ex12.sml" />
+        <Content Include="exn01.out" />
+        <Content Include="exn01.sml" />
+        <Content Include="exn02.out" />
+        <Content Include="exn02.sml" />
+        <Content Include="exn03.out" />
+        <Content Include="exn03.sml" />
+        <Content Include="exn04.out" />
+        <Content Include="exn04.sml" />
+        <Content Include="exn05.sml" />
+        <Content Include="exn06.out" />
+        <Content Include="exn06.sml" />
+    </ItemGroup>
+
+</Project>
